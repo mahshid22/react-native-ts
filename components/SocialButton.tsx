@@ -38,11 +38,14 @@ export default SocialButton;
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
-    width: '20%',
+    marginBottom: 10,
+    width: windowWidth / 8,
     height: windowHeight / 15,
     padding: 10,
     flexDirection: 'row',
     borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconWrapper: {
     width: 35,

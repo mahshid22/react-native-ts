@@ -12,15 +12,31 @@
  */
 
 import React, {useState, type PropsWithChildren} from 'react';
-import {StyleSheet} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
-import LogIn from './screens/login';
 import List from './components/list';
+import LogIn from './screens/login';
+import SignUp from './screens/singup';
 
 const App = () => {
   const [page, setPage] = useState(false);
 
-  return page ? <List /> : <LogIn setPage={setPage} />;
+  return page ? (
+    <List />
+  ) : (
+    // <SafeAreaView style={styles.container}>
+    //   <ScrollView style={styles.scrollView}>
+    <LogIn setPage={setPage} />
+    //   </ScrollView>
+    // </SafeAreaView>
+  );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    marginHorizontal: 20,
+  },
+});
 export default App;

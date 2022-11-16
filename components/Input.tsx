@@ -9,10 +9,15 @@ import {
   View,
 } from 'react-native';
 import {windowHeight, windowWidth} from '../utils/dimention';
+import SocialButton from './SocialButton';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const Input = ({onChangeText, ...rest}) => {
+const Input = ({onChangeText, color, name, ...rest}) => {
   return (
     <View style={styles.inputView}>
+      {name && (
+        <FontAwesome name={name} size={22} color={color} style={styles.icon} />
+      )}
       <TextInput
         style={styles.TextInput}
         {...rest}
@@ -26,12 +31,14 @@ export default Input;
 
 const styles = StyleSheet.create({
   inputView: {
-    backgroundColor: '#f3d2d7',
-    borderRadius: 30,
+    flexDirection: 'row',
+    backgroundColor: '#f7eeef',
+    borderRadius: 5,
     width: '100%',
     height: 45,
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: 'center',
+    padding: 10,
   },
 
   TextInput: {
@@ -39,5 +46,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     fontSize: 16,
+  },
+  icon: {
+    paddingRight: 5,
   },
 });
