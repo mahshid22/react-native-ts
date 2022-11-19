@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -31,7 +32,7 @@ const LogIn = ({setPage}) => {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.GroupView}>
         <Image source={require('../assets/2065064.png')} style={styles.logo} />
         <Text style={styles.logotext}>CONNECT TO PEOPLE</Text>
@@ -41,6 +42,8 @@ const LogIn = ({setPage}) => {
           placeholder="Email"
           placeholderTextColor="#003f5c"
           onChangeText={newText => setEmail(newText)}
+          name="envelope"
+          color="black"
         />
         <Input
           style={styles.TextInput}
@@ -48,6 +51,8 @@ const LogIn = ({setPage}) => {
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
           onChangeText={newText => setPassword(newText)}
+          name="lock"
+          color="black"
         />
 
         <FormButton
@@ -77,17 +82,15 @@ const LogIn = ({setPage}) => {
       </View>
 
       <View style={(styles.GroupView, styles.socialGroupView)}>
-        <Text>Connect with: </Text>
-
         <SocialButton
-          buttonTitle="Sign Up with Google"
+          // buttonTitle="Sign Up with Google"
           btnType="google"
           color="#de4d41"
           backgroundColor="#f5e7ea"
           onPress={() => {}}
         />
         <SocialButton
-          buttonTitle="Sign Up with Facebook"
+          // buttonTitle="Sign Up with Facebook"
           btnType="facebook"
           color="#4867aa"
           backgroundColor="#e6eaf4"
@@ -95,44 +98,35 @@ const LogIn = ({setPage}) => {
         />
 
         <SocialButton
-          buttonTitle="Sign Up with Google"
+          // buttonTitle="Sign Up with Google"
           btnType="twitter"
           color="#0076ff"
           backgroundColor="#cfe5fe"
           onPress={() => {}}
         />
+        <Text>Connect with: </Text>
       </View>
-      <Text
-        style={{
-          textAlign: 'center',
-          paddingHorizontal: 12,
-          position: 'absolute',
-          bottom: 10,
-        }}>
-        All right reserved by us!!!
-      </Text>
-    </View>
+      <Text style={styles.footer}>All right reserved by us!!!</Text>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    padding: 20,
+    paddingTop: 10,
   },
-
   logo: {
-    height: 150,
-    width: 150,
-    marginTop: 50,
-    // resizeMode: 'cover',
+    height: 100,
+    width: 100,
+    marginTop: 10,
   },
   logotext: {
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 50,
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: '900',
     color: 'black',
   },
@@ -151,7 +145,7 @@ const styles = StyleSheet.create({
     width: '70%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 20,
   },
   InputGroupView: {
     width: '70%',
@@ -173,7 +167,7 @@ const styles = StyleSheet.create({
 
   forgot_button: {
     height: 30,
-    marginTop: 70,
+    marginTop: 30,
     marginBottom: 5,
   },
 
@@ -185,6 +179,11 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     marginTop: 40,
     backgroundColor: '#e7489e',
+  },
+  footer: {
+    textAlign: 'center',
+    paddingHorizontal: 12,
+    marginTop: 10,
   },
 });
 

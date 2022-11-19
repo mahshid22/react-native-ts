@@ -15,6 +15,8 @@ import React, {useState, type PropsWithChildren} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
 import List from './components/list';
+import PostCard from './components/PostCard';
+import Home from './screens/home';
 import LogIn from './screens/login';
 import SignUp from './screens/singup';
 
@@ -26,7 +28,8 @@ const App = () => {
   ) : (
     // <SafeAreaView style={styles.container}>
     //   <ScrollView style={styles.scrollView}>
-    <LogIn setPage={setPage} />
+    <Home />
+    // <LogIn setPage={setPage} />
     //   </ScrollView>
     // </SafeAreaView>
   );

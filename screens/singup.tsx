@@ -6,6 +6,7 @@ import {
   PermissionsAndroid,
   Platform,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,122 +31,123 @@ const SignUp = ({setPage}) => {
   const [password, setPassword] = useState('');
   const [filePath, setFilePath] = useState({});
 
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs camera permission',
-          },
-        );
-        // If CAMERA Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else return true;
-  };
+  // const requestCameraPermission = async () => {
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.CAMERA,
+  //         {
+  //           title: 'Camera Permission',
+  //           message: 'App needs camera permission',
+  //         },
+  //       );
+  //       // If CAMERA Permission is granted
+  //       return granted === PermissionsAndroid.RESULTS.GRANTED;
+  //     } catch (err) {
+  //       console.warn(err);
+  //       return false;
+  //     }
+  //   } else return true;
+  // };
 
-  const requestExternalWritePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs write permission',
-          },
-        );
-        // If WRITE_EXTERNAL_STORAGE Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        console.warn(err);
-        alert('Write permission err', err);
-      }
-      return false;
-    } else return true;
-  };
+  // const requestExternalWritePermission = async () => {
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //         {
+  //           title: 'External Storage Write Permission',
+  //           message: 'App needs write permission',
+  //         },
+  //       );
+  //       // If WRITE_EXTERNAL_STORAGE Permission is granted
+  //       return granted === PermissionsAndroid.RESULTS.GRANTED;
+  //     } catch (err) {
+  //       console.warn(err);
+  //       alert('Write permission err', err);
+  //     }
+  //     return false;
+  //   } else return true;
+  // };
 
-  const captureImage = async type => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-      videoQuality: 'low',
-      durationLimit: 30, //Video max duration in seconds
-      saveToPhotos: true,
-    };
-    let isCameraPermitted = await requestCameraPermission();
-    let isStoragePermitted = await requestExternalWritePermission();
-    if (isCameraPermitted && isStoragePermitted) {
-      launchCamera(options, response => {
-        console.log('Response = ', response);
+  // const captureImage = async type => {
+  //   let options = {
+  //     mediaType: type,
+  //     maxWidth: 300,
+  //     maxHeight: 550,
+  //     quality: 1,
+  //     videoQuality: 'low',
+  //     durationLimit: 30, //Video max duration in seconds
+  //     saveToPhotos: true,
+  //   };
+  //   let isCameraPermitted = await requestCameraPermission();
+  //   let isStoragePermitted = await requestExternalWritePermission();
+  //   if (isCameraPermitted && isStoragePermitted) {
+  //     launchCamera(options, response => {
+  //       console.log('Response = ', response);
 
-        if (response.didCancel) {
-          alert('User cancelled camera picker');
-          return;
-        } else if (response.errorCode == 'camera_unavailable') {
-          alert('Camera not available on device');
-          return;
-        } else if (response.errorCode == 'permission') {
-          alert('Permission not satisfied');
-          return;
-        } else if (response.errorCode == 'others') {
-          alert(response.errorMessage);
-          return;
-        }
-        console.log('base64 -> ', response.base64);
-        console.log('uri -> ', response.uri);
-        console.log('width -> ', response.width);
-        console.log('height -> ', response.height);
-        console.log('fileSize -> ', response.fileSize);
-        console.log('type -> ', response.type);
-        console.log('fileName -> ', response.fileName);
-        setFilePath(response);
-      });
-    }
-  };
+  //       if (response.didCancel) {
+  //         alert('User cancelled camera picker');
+  //         return;
+  //       } else if (response.errorCode == 'camera_unavailable') {
+  //         alert('Camera not available on device');
+  //         return;
+  //       } else if (response.errorCode == 'permission') {
+  //         alert('Permission not satisfied');
+  //         return;
+  //       } else if (response.errorCode == 'others') {
+  //         alert(response.errorMessage);
+  //         return;
+  //       }
+  //       console.log('base64 -> ', response.base64);
+  //       console.log('uri -> ', response.uri);
+  //       console.log('width -> ', response.width);
+  //       console.log('height -> ', response.height);
+  //       console.log('fileSize -> ', response.fileSize);
+  //       console.log('type -> ', response.type);
+  //       console.log('fileName -> ', response.fileName);
+  //       setFilePath(response);
+  //     });
+  //   }
+  // };
 
-  const chooseFile = type => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-    };
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
+  // const chooseFile = type => {
+  //   let options = {
+  //     mediaType: type,
+  //     maxWidth: 300,
+  //     maxHeight: 550,
+  //     quality: 1,
+  //   };
+  //   launchImageLibrary(options, response => {
+  //     console.log('Response = ', response);
 
-      if (response.didCancel) {
-        alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
-        return;
-      }
-      console.log('base64 -> ', response.base64);
-      console.log('uri -> ', response.uri);
-      console.log('width -> ', response.width);
-      console.log('height -> ', response.height);
-      console.log('fileSize -> ', response.fileSize);
-      console.log('type -> ', response.type);
-      console.log('fileName -> ', response.fileName);
-      setFilePath(response);
-    });
-  };
+  //     if (response.didCancel) {
+  //       alert('User cancelled camera picker');
+  //       return;
+  //     } else if (response.errorCode == 'camera_unavailable') {
+  //       alert('Camera not available on device');
+  //       return;
+  //     } else if (response.errorCode == 'permission') {
+  //       alert('Permission not satisfied');
+  //       return;
+  //     } else if (response.errorCode == 'others') {
+  //       alert(response.errorMessage);
+  //       return;
+  //     }
+  //     console.log('base64 -> ', response.base64);
+  //     console.log('uri -> ', response.uri);
+  //     console.log('width -> ', response.width);
+  //     console.log('height -> ', response.height);
+  //     console.log('fileSize -> ', response.fileSize);
+  //     console.log('type -> ', response.type);
+  //     console.log('fileName -> ', response.fileName);
+  //     setFilePath(response);
+  //   });
+  // };
 
   return (
-    <View style={styles.container}>
+    // <SafeAreaView style={{flex: 1}}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.GroupView}>
         <Image source={require('../assets/2065064.png')} style={styles.logo} />
         <Text style={styles.logotext}>CONNECT TO PEOPLE</Text>
@@ -157,7 +159,7 @@ const SignUp = ({setPage}) => {
           color="#743a43"
           backgroundColor="#f3d2d7"
           onPress={() => {
-            chooseFile();
+            // chooseFile();
           }}
         />
         <Input
@@ -187,7 +189,7 @@ const SignUp = ({setPage}) => {
         />
         <Input
           style={styles.TextInput}
-          placeholder="Mobilr Number"
+          placeholder="Mobile Number"
           placeholderTextColor="#003f5c"
           onChangeText={() => {}}
           name="mobile"
@@ -204,25 +206,24 @@ const SignUp = ({setPage}) => {
       <View style={(styles.GroupView, styles.footerGroupView)}>
         <Text>Already have an Account?</Text>
         <TouchableOpacity>
-          <Text>SinIn</Text>
+          <Text>SignIn</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    padding: 20,
+    paddingTop: 10,
   },
-
   logo: {
     height: 50,
     width: 50,
-    marginTop: 50,
+    marginTop: 100,
   },
 
   camera: {
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
   },
   logotext: {
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 30,
     fontSize: 15,
     fontWeight: '900',
     color: 'black',
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
 
   GroupView: {
     alignItems: 'center',
-    width: '100%',
+    // width: '100%',
   },
   rowGroupView: {
     flexDirection: 'row',
@@ -250,9 +251,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '50%',
     justifyContent: 'space-between',
-    // paddingHorizontal: 12,
     alignItems: 'center',
     marginTop: 20,
+    marginRight: 40,
   },
   socialGroupView: {
     flexDirection: 'row',
@@ -291,12 +292,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
-    // justifyContent: 'center',
     marginTop: 10,
     backgroundColor: '#e7489e',
   },
   creatAccount: {
-    // marginBottom: 10,
+    marginBottom: 20,
     fontSize: 25,
     color: 'black',
   },

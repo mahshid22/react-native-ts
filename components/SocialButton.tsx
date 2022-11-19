@@ -22,13 +22,17 @@ const SocialButton = ({
         <FontAwesome
           name={btnType}
           style={styles.icon}
-          size={22}
+          size={20}
           color={color}
         />
       </View>
-      {/* <View style={styles.btnTxtWrapper}>
-        <Text style={[styles.buttonText, {color: color}]}>{buttonTitle}</Text>
-      </View> */}
+      {buttonTitle ? (
+        <View style={styles.btnTxtWrapper}>
+          <Text style={[styles.buttonText, {color: color}]}>{buttonTitle}</Text>
+        </View>
+      ) : (
+        ''
+      )}
     </TouchableOpacity>
   );
 };
