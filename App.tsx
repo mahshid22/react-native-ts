@@ -16,8 +16,10 @@ import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
 import List from './components/list';
 import PostCard from './components/PostCard';
+import AddPost from './screens/addPost';
 import Home from './screens/home';
 import LogIn from './screens/login';
+import Post from './screens/post';
 import SignUp from './screens/singup';
 
 const App = () => {
@@ -28,7 +30,8 @@ const App = () => {
   ) : (
     // <SafeAreaView style={styles.container}>
     //   <ScrollView style={styles.scrollView}>
-    <Home />
+    // <AddPost />
+    <Post />
     // <LogIn setPage={setPage} />
     //   </ScrollView>
     // </SafeAreaView>

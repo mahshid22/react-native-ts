@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Champagne_Limousines.ttf",
+      "sha1": "d1305850b6e9170cd081fa3d98b6f566dc554f15"
+    },
+    {
+      "path": "assets/fonts/Kanit-Regular.ttf",
+      "sha1": "4d7b70e9717ae0adecc332fac9af7457063886a4"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Regular.ttf",
+      "sha1": "3564ed0b5363df5cf277c16e0c6bedc5a682217f"
+    },
+    {
+      "path": "assets/fonts/RubikBubbles-Regular.ttf",
+      "sha1": "c2c19e308f9e108e6ecebe2bd4e875b9cade5c9c"
+    },
+    {
+      "path": "assets/fonts/THE_BONES.ttf",
+      "sha1": "c6d612ef1f97504ee5b98b00f547ed57f5605839"
+    }
+  ]
+}

@@ -14,6 +14,11 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-AwesomeTSProject-AwesomeTSProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AwesomeTSProject-AwesomeTSProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		52800B3AF2084FB99F36C32B /* THE_BONES.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6756D7DF38B6491C8FB71A33 /* THE_BONES.ttf */; };
+		11B5BA8D793E4BD6B84D51F8 /* Champagne_Limousines.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F3F6533603944E9B4AB7F3F /* Champagne_Limousines.ttf */; };
+		9C0EDFFD41164A3A81FDD104 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A2DCEC9BD3C4F06AB84CF3B /* OpenSans-Regular.ttf */; };
+		BE2753500E0E47968E616FBF /* Kanit-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D4ECFC9B98B48CCB40C0AC0 /* Kanit-Regular.ttf */; };
+		0DA76E581BBB4A11A808B94F /* RubikBubbles-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0486DC02A754B6DA455FD36 /* RubikBubbles-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +49,11 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AwesomeTSProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AwesomeTSProject-AwesomeTSProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeTSProject-AwesomeTSProjectTests.release.xcconfig"; path = "Target Support Files/Pods-AwesomeTSProject-AwesomeTSProjectTests/Pods-AwesomeTSProject-AwesomeTSProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		6756D7DF38B6491C8FB71A33 /* THE_BONES.ttf */ = {isa = PBXFileReference; name = "THE_BONES.ttf"; path = "../assets/fonts/THE_BONES.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0F3F6533603944E9B4AB7F3F /* Champagne_Limousines.ttf */ = {isa = PBXFileReference; name = "Champagne_Limousines.ttf"; path = "../assets/fonts/Champagne_Limousines.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9A2DCEC9BD3C4F06AB84CF3B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4D4ECFC9B98B48CCB40C0AC0 /* Kanit-Regular.ttf */ = {isa = PBXFileReference; name = "Kanit-Regular.ttf"; path = "../assets/fonts/Kanit-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C0486DC02A754B6DA455FD36 /* RubikBubbles-Regular.ttf */ = {isa = PBXFileReference; name = "RubikBubbles-Regular.ttf"; path = "../assets/fonts/RubikBubbles-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +132,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				568B931268DE45AF88D471FD /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +158,19 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		568B931268DE45AF88D471FD /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				6756D7DF38B6491C8FB71A33 /* THE_BONES.ttf */,
+				0F3F6533603944E9B4AB7F3F /* Champagne_Limousines.ttf */,
+				9A2DCEC9BD3C4F06AB84CF3B /* OpenSans-Regular.ttf */,
+				4D4ECFC9B98B48CCB40C0AC0 /* Kanit-Regular.ttf */,
+				C0486DC02A754B6DA455FD36 /* RubikBubbles-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +268,11 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				52800B3AF2084FB99F36C32B /* THE_BONES.ttf in Resources */,
+				11B5BA8D793E4BD6B84D51F8 /* Champagne_Limousines.ttf in Resources */,
+				9C0EDFFD41164A3A81FDD104 /* OpenSans-Regular.ttf in Resources */,
+				BE2753500E0E47968E616FBF /* Kanit-Regular.ttf in Resources */,
+				0DA76E581BBB4A11A808B94F /* RubikBubbles-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

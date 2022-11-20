@@ -10,26 +10,33 @@ import {
   SafeAreaView,
   Alert,
   RefreshControl,
+  Image,
+  TextInput,
+  ActivityIndicator,
 } from 'react-native';
+import FormButton from '../components/FormButton';
+import Input from '../components/Input';
+import MultiLineInput from '../components/MultiLineInput';
 import PostCard from '../components/PostCard';
+import SocialButton from '../components/SocialButton';
 
 // import PostCard from '../components/PostCard';
 
 const Posts = [
   {
     id: '1',
-    userName: 'Buddha kitty',
+    userName: 'Jenny Doe',
     userImg: require('../assets/users/user-1.jpg'),
     postTime: '4 mins ago',
     post: 'Hey there, this is my test for a post of my social app in React Native.',
     postImg: require('../assets/posts/post-img-4.jpg'),
     liked: true,
     likes: '14',
-    comments: '55',
+    comments: '5',
   },
   {
     id: '2',
-    userName: 'Cat Sprayed',
+    userName: 'John Doe',
     userImg: require('../assets/users/user-2.jpg'),
     postTime: '2 hours ago',
     post: 'Hey there, this is my test for a post of my social app in React Native.',
@@ -40,7 +47,7 @@ const Posts = [
   },
   {
     id: '3',
-    userName: 'Rumpus Cat',
+    userName: 'Ken William',
     userImg: require('../assets/users/user-3.jpg'),
     postTime: '1 hours ago',
     post: 'Hey there, this is my test for a post of my social app in React Native.',
@@ -51,7 +58,7 @@ const Posts = [
   },
   {
     id: '4',
-    userName: 'Snowcone',
+    userName: 'Selina Paul',
     userImg: require('../assets/users/user-4.jpg'),
     postTime: '1 day ago',
     post: 'Hey there, this is my test for a post of my social app in React Native.',
@@ -73,28 +80,66 @@ const Posts = [
   },
 ];
 
-const Home = ({}) => {
-  const [posts, setPosts] = useState(Posts);
-  const [refreshing, setRefreshing] = React.useState(false);
+const AddPost = ({}) => {
+  const [image, setImage] = useState(1);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+  const submitPost = () => {
+    setTransferred(0);
+    setUploading(true);
     setTimeout(() => {
-      setRefreshing(false);
-    }, 6000);
-  }, []);
+      setUploading(false);
+      clearInterval(interval);
+    }, 5000);
+    const interval = setInterval(() => {
+      setTransferred(prevTransferred => prevTransferred + 20);
+    }, 1000);
+  };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
-      <FlatList
-        data={posts}
-        renderItem={({item}) => <PostCard item={item} />}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      <ScrollView contentContainerStyle={styles.container}>
+        {image ? (
+          <Image source={require('../assets/posts/post-img-5.jpg')} />
+        ) : (
+          <SocialButton
+            btnType="camera"
+            color="#743a43"
+            backgroundColor="#f3d2d7"
+            onPress={() => {
+              // chooseFile();
+            }}
+          />
+        )}
+        <MultiLineInput
+          placeholder="Write here..."
+          placeholderTextColor="#003f5c"
+          onChangeText={() => {}}
+          multiline={true}
+          numberOfLines={20}
+        />
+        <View style={styles.submitBTN}>
+          {!uploading ? (
+            <FormButton buttonTitle="Submit" onPress={submitPost} />
+          ) : (
+            <>
+              <Text>{transferred} % Completed!</Text>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-export default Home;
+export default AddPost;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 10,
+  },
+  submitBTN: {
+    width: '80%',
+  },
+});
