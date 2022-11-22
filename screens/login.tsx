@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useState, type PropsWithChildren} from 'react';
@@ -16,18 +17,32 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/core';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import FormButton from '../components/FormButton';
 import SocialButton from '../components/SocialButton';
 import Input from '../components/Input';
+import {RootStackParamList} from '../navogation/AuthStack';
+type ScreenNavigationProp<T extends keyof RootStackParamList> =
+  StackNavigationProp<RootStackParamList, T>;
 
+type ScreenRouteProp<T extends keyof RootStackParamList> = RouteProp<
+  RootStackParamList,
+  T
+>;
+type Props<T extends keyof RootStackParamList> = {
+  route: ScreenRouteProp<T>;
+  navigation: ScreenNavigationProp<T>;
+};
 type Data = {
   id: string;
   title: string;
 };
+
 type Datas = Data[];
-const LogIn = ({setPage}) => {
+const LogIn = ({navigation}: Props<'LogIn'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -55,12 +70,7 @@ const LogIn = ({setPage}) => {
           color="black"
         />
 
-        <FormButton
-          buttonTitle="LOGIN"
-          onPress={() => {
-            setPage(true);
-          }}
-        />
+        <FormButton buttonTitle="LOGIN" onPress={() => {}} />
       </View>
       <View style={styles.GroupView}>
         <View style={(styles.GroupView, styles.rowGroupView)}>

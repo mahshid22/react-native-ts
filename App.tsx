@@ -14,28 +14,10 @@
 import React, {useState, type PropsWithChildren} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
-import List from './components/list';
-import PostCard from './components/PostCard';
-import AddPost from './screens/addPost';
-import Home from './screens/home';
-import LogIn from './screens/login';
-import Post from './screens/post';
-import SignUp from './screens/singup';
+import Providers from './navogation';
 
 const App = () => {
-  const [page, setPage] = useState(false);
-
-  return page ? (
-    <List />
-  ) : (
-    // <SafeAreaView style={styles.container}>
-    //   <ScrollView style={styles.scrollView}>
-    // <AddPost />
-    <Post />
-    // <LogIn setPage={setPage} />
-    //   </ScrollView>
-    // </SafeAreaView>
-  );
+  return <Providers />;
 };
 const styles = StyleSheet.create({
   container: {
