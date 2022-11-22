@@ -15,7 +15,7 @@ import Post from '../screens/post';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Profile from '../screens/profile';
 export type RootStackParamList = {
-  Home: undefined;
+  Feed: undefined;
   AddPost: undefined;
   Post: undefined;
   Profile: undefined;
@@ -27,12 +27,12 @@ const Tab = createBottomTabNavigator();
 const FeedStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Home"
+      name="Feed"
       component={Home}
       options={{
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          color: '#2e64e5',
+          color: '#f42394',
           fontFamily: 'Kufam-SemiBoldItalic',
           fontSize: 18,
         },
@@ -46,7 +46,7 @@ const FeedStack = ({navigation}) => (
               name="plus"
               size={22}
               backgroundColor="#fff"
-              color="#2e64e5"
+              color="#f42394"
               onPress={() => navigation.navigate('AddPost')}
             />
           </View>
@@ -54,22 +54,29 @@ const FeedStack = ({navigation}) => (
       }}
     />
     <Stack.Screen
+      name="Post"
+      component={Post}
+      options={{
+        headerTitle: 'Post',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
       name="AddPost"
       component={AddPost}
       options={{
-        title: '',
+        // headerTitle: 'AddPost',
         headerTitleAlign: 'center',
         headerStyle: {
-          backgroundColor: '#2e64e515',
-          shadowColor: '#2e64e515',
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
           elevation: 0,
         },
-        headerBackTitleVisible: false,
-        headerBackImage: () => (
-          <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#2e64e5" />
-          </View>
-        ),
       }}
     />
     <Stack.Screen
@@ -86,7 +93,7 @@ const FeedStack = ({navigation}) => (
         headerBackTitleVisible: false,
         headerBackImage: () => (
           <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#2e64e5" />
+            <Ionicons name="arrow-back" size={25} color="#ffe1f1" />
           </View>
         ),
       }}
@@ -100,7 +107,13 @@ const ProfileStack = ({navigation}) => (
       name="Profile"
       component={Profile}
       options={{
-        headerShown: false,
+        headerTitle: 'Profile',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     <Stack.Screen
@@ -108,7 +121,6 @@ const ProfileStack = ({navigation}) => (
       component={Post}
       options={{
         headerTitle: 'Post',
-        headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: '#fff',
@@ -120,47 +132,68 @@ const ProfileStack = ({navigation}) => (
   </Stack.Navigator>
 );
 
+const AddPostStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="AddPost"
+      component={AddPost}
+      options={{
+        headerTitle: 'AddPost',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen name="Feed" component={Home} />
+  </Stack.Navigator>
+);
+
 const AppStack = () => {
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#2e64e5',
-      }}>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={FeedStack}
         options={({route}) => ({
           tabBarLabel: 'Home',
+          tabBarBadge: 3,
+          // tabBarVisible: false,
+          tabBarActiveTintColor: '#f42394',
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
               name="home-outline"
-              color={color}
+              color={'#f42394'}
               size={size}
             />
           ),
         })}
       />
       <Tab.Screen
-        name="Post"
-        component={Post}
+        name="New Post"
+        component={AddPostStack}
         options={({route}) => ({
+          tabBarActiveTintColor: '#f42394',
           tabBarIcon: ({color, size}) => (
             <Ionicons
               name="chatbox-ellipses-outline"
-              color={color}
+              color={'#f42394'}
               size={size}
             />
           ),
         })}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
+        name="Me"
+        component={ProfileStack}
+        options={({route}) => ({
+          tabBarActiveTintColor: '#f42394',
           tabBarIcon: ({color, size}) => (
-            <Ionicons name="person-outline" color={color} size={size} />
+            <Ionicons name="person-outline" color={'#f42394'} size={size} />
           ),
-        }}
+        })}
       />
     </Tab.Navigator>
   );

@@ -1,17 +1,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  ScrollView,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  Alert,
-  RefreshControl,
-} from 'react-native';
+import React, {useState} from 'react';
+import {FlatList, RefreshControl} from 'react-native';
 import PostCard from '../components/PostCard';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // import PostCard from '../components/PostCard';
 
@@ -26,6 +18,7 @@ const Posts = [
     liked: true,
     likes: '14',
     comments: '55',
+    saved: true,
   },
   {
     id: '2',
@@ -37,6 +30,7 @@ const Posts = [
     liked: false,
     likes: '8',
     comments: '0',
+    saved: false,
   },
   {
     id: '3',
@@ -48,6 +42,7 @@ const Posts = [
     liked: true,
     likes: '1',
     comments: '0',
+    saved: false,
   },
   {
     id: '4',
@@ -59,6 +54,7 @@ const Posts = [
     liked: true,
     likes: '22',
     comments: '4',
+    saved: true,
   },
   {
     id: '5',
@@ -70,10 +66,11 @@ const Posts = [
     liked: false,
     likes: '0',
     comments: '0',
+    saved: true,
   },
 ];
 
-const Home = ({}) => {
+const Home = ({navigation}) => {
   const [posts, setPosts] = useState(Posts);
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -87,7 +84,9 @@ const Home = ({}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
       <FlatList
         data={posts}
-        renderItem={({item}) => <PostCard item={item} />}
+        renderItem={({item}) => (
+          <PostCard item={item} onPress={() => navigation.navigate('Post')} />
+        )}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         refreshControl={

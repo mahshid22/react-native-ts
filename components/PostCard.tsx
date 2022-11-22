@@ -5,9 +5,9 @@ import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import {windowHeight, windowWidth} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const PostCard = ({item}) => {
+const PostCard = ({item, onPress}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.userInfo}>
         <Image source={item.userImg} style={styles.userImage} />
         <View>
@@ -61,10 +61,13 @@ const PostCard = ({item}) => {
           </Text>
         </View>
         <View style={styles.interaction}>
-          <Ionicons name="md-trash-bin" size={25} />
+          <Ionicons
+            name={item.saved ? 'bookmark' : 'bookmark-outline'}
+            size={25}
+          />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -138,10 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#ffe1f1',
   },
-  // active: active => ({
-  //   backgroundColor:active ? '#2e64e515' : 'transparent';
-  //   ,
-  // }),
   commentIcon: {marginRight: 5},
   likeIcon: {marginRight: 5},
   interactionText: {color: '#333'},

@@ -81,7 +81,7 @@ const Posts = [
 ];
 
 const AddPost = ({}) => {
-  const [image, setImage] = useState(1);
+  const [image, setImage] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 

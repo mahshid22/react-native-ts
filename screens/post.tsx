@@ -7,13 +7,13 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  SafeAreaView,
   Alert,
   RefreshControl,
   Image,
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  SectionList,
 } from 'react-native';
 import FormButton from '../components/FormButton';
 import Input from '../components/Input';
@@ -23,44 +23,114 @@ import SocialButton from '../components/SocialButton';
 import {windowHeight} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Comment from '../components/Comment';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // import PostCard from '../components/PostCard';
-const postDetail = {
-  id: '1',
-  userName: 'Buddha kitty',
-  userImg: require('../assets/users/user-1.jpg'),
-  postTime: '4 mins ago',
-  post: 'Hey there, this is my test for a post of my social app in React Native.',
-  postImg: require('../assets/posts/post-img-4.jpg'),
-  liked: true,
-  likes: '14',
-  comments: '55',
-  commentsText: [
-    {
+const postDetail = [
+  {
+    title: {
       id: '1',
-      userName: 'Rumpus Cat',
+      userName: 'Buddha kitty',
       userImg: require('../assets/users/user-1.jpg'),
-      commentText: 'some comment ....',
+      postTime: '4 mins ago',
+      post: 'Hey there, this is my test for a post of my social app in React Native.',
+      postImg: require('../assets/posts/post-img-4.jpg'),
       liked: true,
+      likes: '14',
+      comments: '55',
     },
-    {
-      id: '2',
-      userName: 'Rumpus Cat 2',
-      userImg: require('../assets/users/user-1.jpg'),
-      commentText: 'other comment ....',
-      liked: false,
-    },
-    {
-      id: '3',
-      userName: 'Rumpus Cat 3',
-      userImg: require('../assets/users/user-1.jpg'),
-      commentText: 'blah blah blah',
-      liked: false,
-    },
-  ],
-};
-// const items =
+    data: [
+      {
+        id: '1',
+        userName: 'Rumpus Cat',
+        userImg: require('../assets/users/user-1.jpg'),
+        commentText: 'some comment ....',
+        liked: true,
+      },
+      {
+        id: '2',
+        userName: 'Rumpus Cat 2',
+        userImg: require('../assets/users/user-1.jpg'),
+        commentText: 'other comment ....',
+        liked: false,
+      },
+      {
+        id: '3',
+        userName: 'Rumpus Cat 3',
+        userImg: require('../assets/users/user-1.jpg'),
+        commentText: 'blah blah blah',
+        liked: false,
+      },
+      {
+        id: '4',
+        userName: 'Rumpus Cat 3',
+        userImg: require('../assets/users/user-1.jpg'),
+        commentText: 'blah blah blah',
+        liked: false,
+      },
+      {
+        id: '5',
+        userName: 'Rumpus Cat 3',
+        userImg: require('../assets/users/user-1.jpg'),
+        commentText: 'blah blah blah',
+        liked: false,
+      },
+    ],
+  },
+];
 
+const HeaderComponent = postDetail => {
+  return (
+    <View style={styles.postImageWrapper}>
+      <Image
+        source={require('../assets/posts/post-img-5.jpg')}
+        style={styles.postImage}
+      />
+      <View style={styles.postActions}>
+        <Text style={styles.userNameText}>Rumpus Cat</Text>
+        <View style={styles.InteractionWrapper}>
+          <TouchableOpacity
+            style={
+              postDetail.liked ? styles.likedInteraction : styles.interaction
+            }>
+            <Ionicons
+              name={!postDetail.liked ? 'heart-outline' : 'heart'}
+              size={25}
+              color={!postDetail.liked ? '#333' : '#f42394'}
+              style={styles.likeIcon}
+            />
+            <Text
+              style={
+                postDetail.liked
+                  ? [styles.likedInteractionText, styles.text]
+                  : [styles.interactionText, styles.text]
+              }>
+              {postDetail.likes > 1
+                ? postDetail.likes + ' likes'
+                : postDetail.likes == 1
+                ? postDetail.likes + 'like'
+                : 'like'}
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.interaction}>
+            <Ionicons
+              name="md-chatbubble-outline"
+              size={25}
+              style={styles.commentIcon}
+            />
+            <Text style={styles.text}>
+              {postDetail.comments > 1
+                ? postDetail.comments + ' comments'
+                : postDetail.comments == 1
+                ? postDetail.comments + ' comment'
+                : 'comment'}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
 const Post = ({}) => {
   const [image, setImage] = useState(1);
   const [uploading, setUploading] = useState(false);
@@ -86,88 +156,34 @@ const Post = ({}) => {
     }, 6000);
   }, []);
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.postImageWrapper}>
-          <Image
-            source={require('../assets/posts/post-img-5.jpg')}
-            style={styles.postImage}
-          />
-          <View style={styles.postActions}>
-            <Text style={styles.userNameText}>Rumpus Cat</Text>
-            <View style={styles.InteractionWrapper}>
-              <TouchableOpacity
-                style={
-                  postDetail.liked
-                    ? styles.likedInteraction
-                    : styles.interaction
-                }>
-                <Ionicons
-                  name={!postDetail.liked ? 'heart-outline' : 'heart'}
-                  size={25}
-                  color={!postDetail.liked ? '#333' : '#f42394'}
-                  style={styles.likeIcon}
-                />
-                <Text
-                  style={
-                    postDetail.liked
-                      ? [styles.likedInteractionText, styles.text]
-                      : [styles.interactionText, styles.text]
-                  }>
-                  {postDetail.likes > 1
-                    ? postDetail.likes + ' likes'
-                    : postDetail.likes == 1
-                    ? postDetail.likes + 'like'
-                    : 'like'}
-                </Text>
-              </TouchableOpacity>
-              <View style={styles.interaction}>
-                <Ionicons
-                  name="md-chatbubble-outline"
-                  size={25}
-                  style={styles.commentIcon}
-                />
-                <Text style={styles.text}>
-                  {postDetail.comments > 1
-                    ? postDetail.comments + ' comments'
-                    : postDetail.comments == 1
-                    ? postDetail.comments + ' comment'
-                    : 'comment'}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <FlatList
-          data={postDetail.commentsText}
-          renderItem={({item}) => <Comment item={item} />}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      </ScrollView>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#080412'}}>
+      <SectionList
+        sections={postDetail}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => <Comment item={item} />}
+        renderSectionHeader={({section: {title}}) => (
+          <HeaderComponent title={title} />
+        )}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </SafeAreaView>
   );
 };
 export default Post;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#080412',
-  },
   postImageWrapper: {
     width: '100%',
     backgroundColor: '#c708c8',
-    height: windowHeight / 2 + 100,
+    height: windowHeight / 3 + 100,
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25,
   },
   postImage: {
     width: '100%',
-    height: windowHeight / 2,
+    height: windowHeight / 3,
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25,
   },
