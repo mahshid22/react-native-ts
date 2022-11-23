@@ -14,11 +14,13 @@ import AddPost from '../screens/addPost';
 import Post from '../screens/post';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Profile from '../screens/profile';
+import Settings from '../screens/setting';
 export type RootStackParamList = {
   Feed: undefined;
   AddPost: undefined;
   Post: undefined;
   Profile: undefined;
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -79,25 +81,6 @@ const FeedStack = ({navigation}) => (
         },
       }}
     />
-    <Stack.Screen
-      name="Profile"
-      component={Profile}
-      options={{
-        title: '',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-        headerBackTitleVisible: false,
-        headerBackImage: () => (
-          <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#ffe1f1" />
-          </View>
-        ),
-      }}
-    />
   </Stack.Navigator>
 );
 
@@ -121,6 +104,19 @@ const ProfileStack = ({navigation}) => (
       component={Post}
       options={{
         headerTitle: 'Post',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="Settings"
+      component={Settings}
+      options={{
+        headerTitle: 'Settings',
         headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: '#fff',
