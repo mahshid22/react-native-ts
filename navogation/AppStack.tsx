@@ -81,7 +81,12 @@ const AddPostStack = () => (
 
 const DrawerNavigation = () => {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      screenOptions={{
+        drawerActiveTintColor: '#bd4a88',
+        drawerStyle: {width: '80%', backgroundColor: '#f1f1f1'},
+        overlayColor: 'transparent',
+      }}>
       <Drawer.Screen
         name="profile"
         component={Profile}

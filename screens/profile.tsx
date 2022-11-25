@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
   },
   profileUserInfo: {
     flexDirection: 'row',
-    paddingLeft: 5,
-    paddingRight: 10,
+    paddingLeft: 10,
+    paddingRight: 15,
   },
   profileFollowing: {
     flexDirection: 'row',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 25,
-    paddingLeft: 5,
+    paddingLeft: 10,
   },
   profileName: {
     color: 'black',
@@ -234,7 +234,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   profileDescription: {
-    paddingLeft: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     marginBottom: 20,
   },
   profilePostsContainer: {

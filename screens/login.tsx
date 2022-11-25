@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   logotext: {
-    marginTop: 30,
+    marginTop: 10,
     marginBottom: 50,
     fontSize: 25,
     fontWeight: '900',

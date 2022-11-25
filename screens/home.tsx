@@ -104,6 +104,61 @@ const Posts = [
   },
 ];
 
+const Skeleton = () => {
+  return (
+    <>
+      <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder.Item
+          flexDirection="row"
+          alignItems="center"
+          marginTop={10}>
+          <SkeletonPlaceholder.Item
+            width={60}
+            height={60}
+            borderRadius={50}
+            margin={10}
+          />
+          <SkeletonPlaceholder.Item
+            width={60}
+            height={60}
+            borderRadius={50}
+            margin={10}
+          />
+          <SkeletonPlaceholder.Item
+            width={60}
+            height={60}
+            borderRadius={50}
+            margin={10}
+          />
+          <SkeletonPlaceholder.Item
+            width={60}
+            height={60}
+            borderRadius={50}
+            margin={10}
+          />
+          <SkeletonPlaceholder.Item
+            width={60}
+            height={60}
+            borderRadius={50}
+            margin={10}
+          />
+        </SkeletonPlaceholder.Item>
+      </SkeletonPlaceholder>
+      <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder.Item
+          flexDirection="column"
+          marginTop={30}
+          alignItems="center">
+          <SkeletonPlaceholder.Item
+            width={windowWidth - 30}
+            height={windowHeight - 250}
+            borderRadius={10}
+          />
+        </SkeletonPlaceholder.Item>
+      </SkeletonPlaceholder>
+    </>
+  );
+};
 const Home = ({navigation}) => {
   const [skeleton, setSkeleton] = useState(true);
   const [posts, setPosts] = useState(Posts);
@@ -136,54 +191,8 @@ const Home = ({navigation}) => {
   }, []);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
-      {!!skeleton ? (
-        <>
-          <SkeletonPlaceholder borderRadius={4}>
-            <SkeletonPlaceholder.Item flexDirection="row" alignItems="center">
-              <SkeletonPlaceholder.Item
-                width={60}
-                height={60}
-                borderRadius={50}
-                margin={10}
-              />
-              <SkeletonPlaceholder.Item
-                width={60}
-                height={60}
-                borderRadius={50}
-                margin={10}
-              />
-              <SkeletonPlaceholder.Item
-                width={60}
-                height={60}
-                borderRadius={50}
-                margin={10}
-              />
-              <SkeletonPlaceholder.Item
-                width={60}
-                height={60}
-                borderRadius={50}
-                margin={10}
-              />
-              <SkeletonPlaceholder.Item
-                width={60}
-                height={60}
-                borderRadius={50}
-                margin={10}
-              />
-            </SkeletonPlaceholder.Item>
-          </SkeletonPlaceholder>
-          <SkeletonPlaceholder borderRadius={4}>
-            <SkeletonPlaceholder.Item
-              flexDirection="column"
-              alignItems="center">
-              <SkeletonPlaceholder.Item
-                width={windowWidth - 30}
-                height={windowHeight - 250}
-                borderRadius={10}
-              />
-            </SkeletonPlaceholder.Item>
-          </SkeletonPlaceholder>
-        </>
+      {skeleton ? (
+        <Skeleton />
       ) : (
         <FlatList
           data={posts}
