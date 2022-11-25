@@ -18,7 +18,7 @@ const Comment = ({item}) => {
           <Ionicons
             name={!item.liked ? 'heart-outline' : 'heart'}
             size={25}
-            color={!item.liked ? '#333' : '#f42394'}
+            color={!item.liked ? '#333' : '#bd4a88'}
             style={styles.likeIcon}
           />
         </TouchableOpacity>

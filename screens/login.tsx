@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useState, type PropsWithChildren} from 'react';
+import React, {useContext, useState, type PropsWithChildren} from 'react';
 import {
   FlatList,
   Image,
   ImageBackground,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -17,6 +16,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/core';
 
@@ -25,6 +26,8 @@ import FormButton from '../components/FormButton';
 import SocialButton from '../components/SocialButton';
 import Input from '../components/Input';
 import {RootStackParamList} from '../navogation/AuthStack';
+import {AuthContext} from '../navogation/AuthProvider';
+
 type ScreenNavigationProp<T extends keyof RootStackParamList> =
   StackNavigationProp<RootStackParamList, T>;
 
@@ -45,6 +48,7 @@ type Datas = Data[];
 const LogIn = ({navigation}: Props<'LogIn'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {user, setUser} = useContext(AuthContext);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -70,11 +74,19 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
           color="black"
         />
 
-        <FormButton buttonTitle="LOGIN" onPress={() => {}} />
+        <FormButton
+          buttonTitle="LOGIN"
+          onPress={() => {
+            setUser('login');
+          }}
+        />
       </View>
       <View style={styles.GroupView}>
         <View style={(styles.GroupView, styles.rowGroupView)}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SignUp');
+            }}>
             <Text style={styles.forgot_button}>Creat account</Text>
           </TouchableOpacity>
           <TouchableOpacity>
@@ -92,6 +104,7 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
       </View>
 
       <View style={(styles.GroupView, styles.socialGroupView)}>
+        <Text>Connect with: </Text>
         <SocialButton
           // buttonTitle="Sign Up with Google"
           btnType="google"
@@ -114,7 +127,6 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
           backgroundColor="#cfe5fe"
           onPress={() => {}}
         />
-        <Text>Connect with: </Text>
       </View>
       <Text style={styles.footer}>All right reserved by us!!!</Text>
     </ScrollView>
@@ -126,6 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    paddingBottom: 0,
     paddingTop: 10,
   },
   logo: {
@@ -152,7 +165,7 @@ const styles = StyleSheet.create({
   },
   socialGroupView: {
     flexDirection: 'row',
-    width: '70%',
+    width: '80%',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
@@ -191,9 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e7489e',
   },
   footer: {
-    textAlign: 'center',
-    paddingHorizontal: 12,
-    marginTop: 10,
+    // marginTop: 10,
   },
 });
 

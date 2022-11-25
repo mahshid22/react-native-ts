@@ -2,12 +2,15 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
-import {windowHeight, windowWidth} from '../utils/dimention';
+import {windowHeight} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const PostCard = ({item, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      activeOpacity={0.7}>
       <View style={styles.userInfo}>
         <Image source={item.userImg} style={styles.userImage} />
         <View>
@@ -30,7 +33,7 @@ const PostCard = ({item, onPress}) => {
           <Ionicons
             name={!item.liked ? 'heart-outline' : 'heart'}
             size={25}
-            color={!item.liked ? '#333' : '#f42394'}
+            color={!item.liked ? '#333' : '#bd4a88'}
             style={styles.likeIcon}
           />
           <Text
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
   likeIcon: {marginRight: 5},
   interactionText: {color: '#333'},
   likedInteractionText: {
-    color: '#f42394',
+    color: '#bd4a88',
   },
   text: {
     fontSize: 16,

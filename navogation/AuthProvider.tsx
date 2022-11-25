@@ -14,7 +14,7 @@ interface IContextProps {
 export const AuthContext = createContext({} as IContextProps);
 
 const AuthProvider = ({children}) => {
-  const [user, setUser] = useState('user');
+  const [user, setUser] = useState('logedin');
 
   return (
     <AuthContext.Provider

@@ -3,9 +3,6 @@
 import React, {useState, type PropsWithChildren} from 'react';
 import {
   Image,
-  PermissionsAndroid,
-  Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +13,7 @@ import ImagePicker, {
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/core';
 import FormButton from '../components/FormButton';
@@ -44,70 +42,77 @@ const SignUp = ({navigation}: Props<'SignUp'>) => {
   const [filePath, setFilePath] = useState({});
 
   return (
-    // <SafeAreaView style={{flex: 1}}>
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.GroupView}>
-        <Image source={require('../assets/2065064.png')} style={styles.logo} />
-        <Text style={styles.logotext}>CONNECT TO PEOPLE</Text>
-        <Text style={styles.creatAccount}>CREAT ACCOUNT</Text>
-      </View>
-      <View style={(styles.GroupView, styles.InputGroupView)}>
-        <SocialButton
-          btnType="camera"
-          color="#743a43"
-          backgroundColor="#f3d2d7"
-          onPress={() => {
-            // chooseFile();
-          }}
-        />
-        <Input
-          style={styles.TextInput}
-          placeholder="Name"
-          placeholderTextColor="#003f5c"
-          onChangeText={() => {}}
-          name="user"
-          color="black"
-        />
-        <Input
-          style={styles.TextInput}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={newText => setEmail(newText)}
-          name="envelope"
-          color="black"
-        />
-        <Input
-          style={styles.TextInput}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          name="lock"
-          color="black"
-          onChangeText={newText => setPassword(newText)}
-        />
-        <Input
-          style={styles.TextInput}
-          placeholder="Mobile Number"
-          placeholderTextColor="#003f5c"
-          onChangeText={() => {}}
-          name="mobile"
-          color="black"
-        />
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.GroupView}>
+          <Image
+            source={require('../assets/2065064.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.logotext}>CONNECT TO PEOPLE</Text>
+          <Text style={styles.creatAccount}>CREAT ACCOUNT</Text>
+        </View>
+        <View style={(styles.GroupView, styles.InputGroupView)}>
+          <SocialButton
+            btnType="camera"
+            color="#743a43"
+            backgroundColor="#f3d2d7"
+            onPress={() => {
+              // chooseFile();
+            }}
+          />
+          <Input
+            style={styles.TextInput}
+            placeholder="Name"
+            placeholderTextColor="#003f5c"
+            onChangeText={() => {}}
+            name="user"
+            color="black"
+          />
+          <Input
+            style={styles.TextInput}
+            placeholder="Email"
+            placeholderTextColor="#003f5c"
+            onChangeText={newText => setEmail(newText)}
+            name="envelope"
+            color="black"
+          />
+          <Input
+            style={styles.TextInput}
+            placeholder="Password"
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            name="lock"
+            color="black"
+            onChangeText={newText => setPassword(newText)}
+          />
+          <Input
+            style={styles.TextInput}
+            placeholder="Mobile Number"
+            placeholderTextColor="#003f5c"
+            onChangeText={() => {}}
+            name="mobile"
+            color="black"
+          />
 
-        <FormButton
-          buttonTitle="SIGNUP"
-          onPress={() => {
-            setPage(true);
-          }}
-        />
-      </View>
-      <View style={(styles.GroupView, styles.footerGroupView)}>
-        <Text>Already have an Account?</Text>
-        <TouchableOpacity>
-          <Text>SignIn</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <FormButton
+            buttonTitle="SIGNUP"
+            onPress={() => {
+              setPage(true);
+            }}
+          />
+        </View>
+        <View style={(styles.GroupView, styles.footerGroupView)}>
+          <Text>Already have an Account?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('LogIn');
+            }}>
+            <Text style={styles.signIn}>SignIn</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -115,13 +120,13 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 10,
+    // padding: 20,
+    // paddingTop: 10,
   },
   logo: {
     height: 50,
     width: 50,
-    marginTop: 100,
+    marginTop: 30,
   },
 
   camera: {
@@ -137,7 +142,6 @@ const styles = StyleSheet.create({
 
   GroupView: {
     alignItems: 'center',
-    // width: '100%',
   },
   rowGroupView: {
     flexDirection: 'row',
@@ -194,9 +198,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#e7489e',
   },
   creatAccount: {
-    marginBottom: 20,
+    marginBottom: 15,
     fontSize: 25,
     color: 'black',
+  },
+  signIn: {
+    paddingLeft: 5,
+    fontWeight: '900',
+    color: '#393939',
   },
 });
 

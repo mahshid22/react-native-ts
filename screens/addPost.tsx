@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
   Text,
   StyleSheet,
   FlatList,
-  SafeAreaView,
   Alert,
   RefreshControl,
   Image,
@@ -19,6 +19,7 @@ import Input from '../components/Input';
 import MultiLineInput from '../components/MultiLineInput';
 import PostCard from '../components/PostCard';
 import SocialButton from '../components/SocialButton';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // import PostCard from '../components/PostCard';
 
@@ -80,17 +81,24 @@ const Posts = [
   },
 ];
 
-const AddPost = ({}) => {
+const AddPost = ({navigation}) => {
   const [image, setImage] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
-
+  useFocusEffect(
+    useCallback(() => {
+      navigation.getParent().setOptions({
+        swipeEnabled: false,
+      });
+    }, []),
+  );
   const submitPost = () => {
     setTransferred(0);
     setUploading(true);
     setTimeout(() => {
       setUploading(false);
       clearInterval(interval);
+      navigation.navigate('Home');
     }, 5000);
     const interval = setInterval(() => {
       setTransferred(prevTransferred => prevTransferred + 20);

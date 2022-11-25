@@ -79,7 +79,8 @@ const postDetail = [
   },
 ];
 
-const HeaderComponent = postDetail => {
+const HeaderComponent = title => {
+  const user = JSON.parse(title.title);
   return (
     <View style={styles.postImageWrapper}>
       <Image
@@ -87,28 +88,26 @@ const HeaderComponent = postDetail => {
         style={styles.postImage}
       />
       <View style={styles.postActions}>
-        <Text style={styles.userNameText}>Rumpus Cat</Text>
+        <Text style={styles.userNameText}>{user.userName}</Text>
         <View style={styles.InteractionWrapper}>
           <TouchableOpacity
-            style={
-              postDetail.liked ? styles.likedInteraction : styles.interaction
-            }>
+            style={user.liked ? styles.likedInteraction : styles.interaction}>
             <Ionicons
-              name={!postDetail.liked ? 'heart-outline' : 'heart'}
+              name={!user.liked ? 'heart-outline' : 'heart'}
               size={25}
-              color={!postDetail.liked ? '#333' : '#f42394'}
+              color={!user.liked ? '#333' : '#bd4a88'}
               style={styles.likeIcon}
             />
             <Text
               style={
-                postDetail.liked
+                user.liked
                   ? [styles.likedInteractionText, styles.text]
                   : [styles.interactionText, styles.text]
               }>
-              {postDetail.likes > 1
-                ? postDetail.likes + ' likes'
-                : postDetail.likes == 1
-                ? postDetail.likes + 'like'
+              {user.likes > 1
+                ? user.likes + ' likes'
+                : user.likes == 1
+                ? user.likes + 'like'
                 : 'like'}
             </Text>
           </TouchableOpacity>
@@ -119,13 +118,20 @@ const HeaderComponent = postDetail => {
               style={styles.commentIcon}
             />
             <Text style={styles.text}>
-              {postDetail.comments > 1
-                ? postDetail.comments + ' comments'
-                : postDetail.comments == 1
-                ? postDetail.comments + ' comment'
+              {user.comments > 1
+                ? user.comments + ' comments'
+                : user.comments == 1
+                ? user.comments + ' comment'
                 : 'comment'}
             </Text>
           </View>
+        </View>
+        <View style={styles.post}>
+          <Text>
+            Lorem ipsum is placeholder text commonly used in the graphic
+            <Text style={styles.more}> more...</Text>
+          </Text>
+          <TouchableOpacity></TouchableOpacity>
         </View>
       </View>
     </View>
@@ -160,10 +166,26 @@ const Post = ({}) => {
       <SectionList
         sections={postDetail}
         keyExtractor={(item, index) => item + index}
-        renderItem={({item}) => <Comment item={item} />}
+        renderItem={({item, index}) => {
+          console.log(postDetail[0].data.length);
+          if (postDetail[0].data.length - 1 === index) {
+            return (
+              <View style={styles.lastcomment}>
+                <Comment item={item} />
+                <MultiLineInput
+                  onChangeText={() => {}}
+                  placeholder="write youre comment"
+                />
+                <FormButton buttonTitle="SEND COMMENT" />
+              </View>
+            );
+          }
+          return <Comment item={item} />;
+        }}
         renderSectionHeader={({section: {title}}) => (
-          <HeaderComponent title={title} />
+          <HeaderComponent title={JSON.stringify(title)} />
         )}
+        // stickySectionHeadersEnabled={true}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -177,7 +199,7 @@ const styles = StyleSheet.create({
   postImageWrapper: {
     width: '100%',
     backgroundColor: '#c708c8',
-    height: windowHeight / 3 + 100,
+    height: windowHeight / 3 + 135,
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25,
   },
@@ -186,6 +208,9 @@ const styles = StyleSheet.create({
     height: windowHeight / 3,
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25,
+  },
+  post: {
+    flexDirection: 'row',
   },
   submitBTN: {
     width: '80%',
@@ -213,7 +238,7 @@ const styles = StyleSheet.create({
   likeIcon: {marginRight: 5},
   interactionText: {color: '#333'},
   likedInteractionText: {
-    color: '#f42394',
+    color: '#bd4a88',
   },
   text: {
     fontSize: 16,
@@ -228,5 +253,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
+  },
+  lastcomment: {
+    marginBottom: 20,
+  },
+  more: {
+    color: 'black',
+    fontWeight: '900',
   },
 });

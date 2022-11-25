@@ -3,11 +3,9 @@
 /* eslint-disable curly */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import Home from '../screens/home';
 import AddPost from '../screens/addPost';
@@ -15,18 +13,20 @@ import Post from '../screens/post';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Profile from '../screens/profile';
 import Settings from '../screens/setting';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 export type RootStackParamList = {
   Feed: undefined;
   AddPost: undefined;
   Post: undefined;
   Profile: undefined;
   Settings: undefined;
+  DrawerNavigation: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
-
-const FeedStack = ({navigation}) => (
+const Drawer = createDrawerNavigator();
+const FeedStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Feed"
@@ -34,7 +34,7 @@ const FeedStack = ({navigation}) => (
       options={{
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          color: '#f42394',
+          color: '#bd4a88',
           fontFamily: 'Kufam-SemiBoldItalic',
           fontSize: 18,
         },
@@ -42,17 +42,6 @@ const FeedStack = ({navigation}) => (
           shadowColor: '#fff',
           elevation: 0,
         },
-        headerRight: () => (
-          <View style={{marginRight: 10}}>
-            <FontAwesome5.Button
-              name="plus"
-              size={22}
-              backgroundColor="#fff"
-              color="#f42394"
-              onPress={() => navigation.navigate('AddPost')}
-            />
-          </View>
-        ),
       }}
     />
     <Stack.Screen
@@ -68,67 +57,10 @@ const FeedStack = ({navigation}) => (
         },
       }}
     />
-    <Stack.Screen
-      name="AddPost"
-      component={AddPost}
-      options={{
-        // headerTitle: 'AddPost',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-      }}
-    />
   </Stack.Navigator>
 );
 
-const ProfileStack = ({navigation}) => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Profile"
-      component={Profile}
-      options={{
-        headerTitle: 'Profile',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-      }}
-    />
-    <Stack.Screen
-      name="Post"
-      component={Post}
-      options={{
-        headerTitle: 'Post',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-      }}
-    />
-    <Stack.Screen
-      name="Settings"
-      component={Settings}
-      options={{
-        headerTitle: 'Settings',
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-      }}
-    />
-  </Stack.Navigator>
-);
-
-const AddPostStack = ({navigation}) => (
+const AddPostStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="AddPost"
@@ -147,23 +79,34 @@ const AddPostStack = ({navigation}) => (
   </Stack.Navigator>
 );
 
+const DrawerNavigation = () => {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="profile"
+        component={Profile}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen name="setting" component={Settings} />
+    </Drawer.Navigator>
+  );
+};
+
 const AppStack = () => {
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}}>
+    <Tab.Navigator screenOptions={{tabBarShowLabel: false, headerShown: false}}>
       <Tab.Screen
         name="Home"
         component={FeedStack}
         options={({route}) => ({
-          tabBarLabel: 'Home',
           tabBarBadge: 3,
-          // tabBarVisible: false,
-          tabBarActiveTintColor: '#f42394',
+          tabBarBadgeStyle: {
+            color: '#7b817c',
+            backgroundColor: '#60de78',
+          },
+          tabBarActiveTintColor: '#bd4a88',
           tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="home-outline"
-              color={'#f42394'}
-              size={size}
-            />
+            <MaterialCommunityIcons name="home" color={'#bd4a88'} size={size} />
           ),
         })}
       />
@@ -171,23 +114,19 @@ const AppStack = () => {
         name="New Post"
         component={AddPostStack}
         options={({route}) => ({
-          tabBarActiveTintColor: '#f42394',
+          tabBarActiveTintColor: '#bd4a88',
           tabBarIcon: ({color, size}) => (
-            <Ionicons
-              name="chatbox-ellipses-outline"
-              color={'#f42394'}
-              size={size}
-            />
+            <Ionicons name="chatbox-ellipses" color={'#bd4a88'} size={size} />
           ),
         })}
       />
       <Tab.Screen
         name="Me"
-        component={ProfileStack}
+        component={DrawerNavigation}
         options={({route}) => ({
-          tabBarActiveTintColor: '#f42394',
+          tabBarActiveTintColor: '#bd4a88',
           tabBarIcon: ({color, size}) => (
-            <Ionicons name="person-outline" color={'#f42394'} size={size} />
+            <Ionicons name="person" color={'#bd4a88'} size={size} />
           ),
         })}
       />
