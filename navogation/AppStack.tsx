@@ -90,7 +90,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen
         name="profile"
         component={Profile}
-        options={{headerShown: false}}
+        // options={{headerShown: false}}
       />
       <Drawer.Screen name="setting" component={Settings} />
     </Drawer.Navigator>

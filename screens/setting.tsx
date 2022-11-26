@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   Button,
@@ -11,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Comment from '../components/Comment';
+import {AuthContext} from '../navogation/AuthProvider';
 
 const SettingsCat = [
   {
@@ -33,8 +34,20 @@ const SettingsCat = [
 ];
 
 const Item = ({title}) => {
+  const {user, setUser} = useContext(AuthContext);
   if (title === 'delete account') {
     return;
+  }
+  if (title === 'logout') {
+    return (
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => {
+          setUser('');
+        }}>
+        <Text style={styles.title}>{title}</Text>
+      </TouchableOpacity>
+    );
   }
   return (
     <TouchableOpacity style={styles.item}>
@@ -45,6 +58,7 @@ const Item = ({title}) => {
 
 const Settings = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
+  const {user, setUser} = useContext(AuthContext);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

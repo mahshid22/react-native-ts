@@ -167,7 +167,6 @@ const Post = ({}) => {
         sections={postDetail}
         keyExtractor={(item, index) => item + index}
         renderItem={({item, index}) => {
-          console.log(postDetail[0].data.length);
           if (postDetail[0].data.length - 1 === index) {
             return (
               <View style={styles.lastcomment}>
