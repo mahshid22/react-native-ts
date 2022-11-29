@@ -24,7 +24,7 @@ import {windowHeight} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Comment from '../components/Comment';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
+import axios from '../axios';
 // import PostCard from '../components/PostCard';
 const postDetail = [
   {
@@ -80,7 +80,10 @@ const postDetail = [
 ];
 
 const HeaderComponent = title => {
-  const user = JSON.parse(title.title);
+  console.log(title.title.attributes.title);
+  const user = title.title.attributes;
+  let time = new Date(title.title.attributes.createdAt);
+  let localtime = time.toLocaleString('en-GB', {timeZone: 'UTC'});
   return (
     <View style={styles.postImageWrapper}>
       <Image
@@ -88,7 +91,7 @@ const HeaderComponent = title => {
         style={styles.postImage}
       />
       <View style={styles.postActions}>
-        <Text style={styles.userNameText}>{user.userName}</Text>
+        <Text style={styles.userNameText}>{user.title}</Text>
         <View style={styles.InteractionWrapper}>
           <TouchableOpacity
             style={user.liked ? styles.likedInteraction : styles.interaction}>
@@ -128,20 +131,21 @@ const HeaderComponent = title => {
         </View>
         <View style={styles.post}>
           <Text>
-            Lorem ipsum is placeholder text commonly used in the graphic
+            {user.caption}
             <Text style={styles.more}> more...</Text>
           </Text>
+          <Text>{localtime}</Text>
           <TouchableOpacity></TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
-const Post = ({}) => {
+const Post = ({navigation, route}) => {
   const [image, setImage] = useState(1);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
-
+  console.log(route.params.id);
   const submitPost = () => {
     setTransferred(0);
     setUploading(true);
@@ -154,17 +158,31 @@ const Post = ({}) => {
     }, 1000);
   };
   const [refreshing, setRefreshing] = React.useState(false);
+  const [post, setPost] = useState([]);
 
+  React.useEffect(() => {
+    axios
+      .get(`/posts/${route.params.id}?populate=%2A`)
+      .then(function (response) {
+        // console.log('response Post', response);
+        setPost(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [route.params.id]);
+  console.log('post', post);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 6000);
   }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#080412'}}>
-      <SectionList
-        sections={postDetail}
+      {/* <SectionList
+        sections={post}
         keyExtractor={(item, index) => item + index}
         renderItem={({item, index}) => {
           if (postDetail[0].data.length - 1 === index) {
@@ -189,7 +207,8 @@ const Post = ({}) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      />
+      /> */}
+      <HeaderComponent title={post} />
     </SafeAreaView>
   );
 };
@@ -209,7 +228,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 25,
   },
   post: {
-    flexDirection: 'row',
+    width: '100%',
   },
   submitBTN: {
     width: '80%',

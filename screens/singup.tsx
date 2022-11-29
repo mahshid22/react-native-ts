@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useState, type PropsWithChildren} from 'react';
+import React, {useContext, useState, type PropsWithChildren} from 'react';
 import {
   Image,
   ScrollView,
@@ -13,6 +13,8 @@ import ImagePicker, {
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/core';
@@ -20,6 +22,8 @@ import FormButton from '../components/FormButton';
 import SocialButton from '../components/SocialButton';
 import Input from '../components/Input';
 import {RootStackParamList} from '../navogation/AuthStack';
+import axios from 'axios';
+import {AuthContext} from '../navogation/AuthProvider';
 type ScreenNavigationProp<T extends keyof RootStackParamList> =
   StackNavigationProp<RootStackParamList, T>;
 
@@ -38,8 +42,37 @@ type Data = {
 type Datas = Data[];
 const SignUp = ({navigation}: Props<'SignUp'>) => {
   const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [filePath, setFilePath] = useState({});
+  const {user, setUser} = useContext(AuthContext);
+
+  const storeToken = async jwt => {
+    try {
+      await AsyncStorage.setItem('token', jwt);
+    } catch (error) {
+      console.log('Something went wrong', error);
+    }
+  };
+  const signUp = () => {
+    axios
+      .post(
+        'https://powerful-dusk-84737.herokuapp.com/api/auth/local/register',
+        {
+          email: email,
+          username: userName,
+          password: password,
+        },
+      )
+      .then(response => {
+        console.log(response);
+        storeToken(response.data.jwt);
+        setUser(response.data.user);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -65,7 +98,9 @@ const SignUp = ({navigation}: Props<'SignUp'>) => {
             style={styles.TextInput}
             placeholder="Name"
             placeholderTextColor="#003f5c"
-            onChangeText={() => {}}
+            onChangeText={newText => {
+              setUserName(newText);
+            }}
             name="user"
             color="black"
           />
@@ -98,7 +133,7 @@ const SignUp = ({navigation}: Props<'SignUp'>) => {
           <FormButton
             buttonTitle="SIGNUP"
             onPress={() => {
-              setPage(true);
+              signUp();
             }}
           />
         </View>

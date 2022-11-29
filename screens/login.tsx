@@ -17,9 +17,10 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 import {StackNavigationProp} from '@react-navigation/stack';
+import axios from 'axios';
 import {RouteProp} from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import FormButton from '../components/FormButton';
@@ -46,10 +47,32 @@ type Data = {
 
 type Datas = Data[];
 const LogIn = ({navigation}: Props<'LogIn'>) => {
-  const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const {user, setUser} = useContext(AuthContext);
-
+  const storeToken = async jwt => {
+    try {
+      await AsyncStorage.setItem('token', jwt);
+    } catch (error) {
+      console.log('Something went wrong', error);
+    }
+  };
+  const logIn = () => {
+    console.log('object', userName, password);
+    axios
+      .post('https://powerful-dusk-84737.herokuapp.com/api/auth/local', {
+        identifier: userName,
+        password: password,
+      })
+      .then(response => {
+        console.log(response);
+        storeToken(response.data.jwt);
+        setUser(response.data.user);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.GroupView}>
@@ -58,9 +81,9 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
       </View>
       <View style={(styles.GroupView, styles.InputGroupView)}>
         <Input
-          placeholder="Email"
+          placeholder="UserName"
           placeholderTextColor="#003f5c"
-          onChangeText={newText => setEmail(newText)}
+          onChangeText={(newText: string) => setUserName(newText)}
           name="envelope"
           color="black"
         />
@@ -77,7 +100,7 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
         <FormButton
           buttonTitle="LOGIN"
           onPress={() => {
-            setUser('login');
+            logIn();
           }}
         />
       </View>

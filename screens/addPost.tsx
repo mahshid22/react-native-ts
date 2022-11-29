@@ -20,6 +20,8 @@ import MultiLineInput from '../components/MultiLineInput';
 import PostCard from '../components/PostCard';
 import SocialButton from '../components/SocialButton';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {windowHeight, windowWidth} from '../utils/dimention';
 
 // import PostCard from '../components/PostCard';
 
@@ -82,7 +84,7 @@ const Posts = [
 ];
 
 const AddPost = ({navigation}) => {
-  const [image, setImage] = useState(0);
+  const [image, setImage] = useState();
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
   useFocusEffect(
@@ -92,6 +94,18 @@ const AddPost = ({navigation}) => {
       });
     }, []),
   );
+  const onPressButton = () => {
+    launchImageLibrary(
+      {
+        quality: 1,
+      },
+      response => {
+        if (!response.didCancel) {
+          setImage(response.assets[0]);
+        }
+      },
+    );
+  };
   const submitPost = () => {
     setTransferred(0);
     setUploading(true);
@@ -104,21 +118,30 @@ const AddPost = ({navigation}) => {
       setTransferred(prevTransferred => prevTransferred + 20);
     }, 1000);
   };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
       <ScrollView contentContainerStyle={styles.container}>
-        {image ? (
-          <Image source={require('../assets/posts/post-img-5.jpg')} />
-        ) : (
-          <SocialButton
-            btnType="camera"
-            color="#743a43"
-            backgroundColor="#f3d2d7"
-            onPress={() => {
-              // chooseFile();
+        <SocialButton
+          btnType="camera"
+          color="#743a43"
+          backgroundColor="#f3d2d7"
+          onPress={() => {
+            onPressButton();
+          }}
+        />
+        {image && (
+          <Image
+            source={{uri: image.uri}}
+            style={{
+              borderRadius: 10,
+              margin: 5,
+              height: windowWidth,
+              width: windowWidth,
             }}
           />
         )}
+
         <MultiLineInput
           placeholder="Write here..."
           placeholderTextColor="#003f5c"
@@ -143,7 +166,6 @@ const AddPost = ({navigation}) => {
 export default AddPost;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     paddingTop: 10,
   },

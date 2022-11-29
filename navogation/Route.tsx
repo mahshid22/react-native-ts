@@ -9,10 +9,26 @@ import {AuthContext} from './AuthProvider';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
+  const [initializing, setInitializing] = useState(false);
 
+  useEffect(() => {
+    const token = async () => {
+      let userToken;
+      try {
+        userToken = await AsyncStorage.getItem('token');
+        if (userToken) setInitializing(true);
+      } catch (error) {
+        console.log('Something went wrong', error);
+      }
+    };
+    token();
+  }, []);
+
+  if (!initializing) return null;
   return (
     <SafeAreaProvider>
       <NavigationContainer>

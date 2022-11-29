@@ -14,95 +14,96 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import Story from '../components/Story';
+import axios from '../axios';
 
 // import PostCard from '../components/PostCard';
 
-const Posts = [
-  {
-    id: '1',
-    userName: 'Buddha kitty',
-    userImg: require('../assets/users/user-1.jpg'),
-    postTime: '4 mins ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../assets/posts/post-img-4.jpg'),
-    liked: true,
-    likes: '14',
-    comments: '55',
-    saved: true,
-  },
-  {
-    id: '2',
-    userName: 'Cat Sprayed',
-    userImg: require('../assets/users/user-2.jpg'),
-    postTime: '2 hours ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '8',
-    comments: '0',
-    saved: false,
-  },
-  {
-    id: '3',
-    userName: 'Rumpus Cat',
-    userImg: require('../assets/users/user-3.jpg'),
-    postTime: '1 hours ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../assets/posts/post-img-2.jpg'),
-    liked: true,
-    likes: '1',
-    comments: '0',
-    saved: false,
-  },
-  {
-    id: '4',
-    userName: 'Snowcone',
-    userImg: require('../assets/users/user-4.jpg'),
-    postTime: '1 day ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../assets/posts/post-img-3.jpg'),
-    liked: true,
-    likes: '22',
-    comments: '4',
-    saved: true,
-  },
-  {
-    id: '5',
-    userName: 'Christy Alex',
-    userImg: require('../assets/users/user-5.jpg'),
-    postTime: '2 days ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '0',
-    comments: '0',
-    saved: true,
-  },
-  {
-    id: '6',
-    userName: 'Christy Alex2',
-    userImg: require('../assets/users/user-6.jpg'),
-    postTime: '2 days ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '0',
-    comments: '0',
-    saved: true,
-  },
-  {
-    id: '7',
-    userName: 'Christy Alex2',
-    userImg: require('../assets/users/user-7.jpg'),
-    postTime: '2 days ago',
-    post: 'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
-    liked: false,
-    likes: '0',
-    comments: '0',
-    saved: true,
-  },
-];
+// const Posts = [
+//   {
+//     id: '1',
+//     userName: 'Buddha kitty',
+//     userImg: require('../assets/users/user-1.jpg'),
+//     postTime: '4 mins ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: require('../assets/posts/post-img-4.jpg'),
+//     liked: true,
+//     likes: '14',
+//     comments: '55',
+//     saved: true,
+//   },
+//   {
+//     id: '2',
+//     userName: 'Cat Sprayed',
+//     userImg: require('../assets/users/user-2.jpg'),
+//     postTime: '2 hours ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: 'none',
+//     liked: false,
+//     likes: '8',
+//     comments: '0',
+//     saved: false,
+//   },
+//   {
+//     id: '3',
+//     userName: 'Rumpus Cat',
+//     userImg: require('../assets/users/user-3.jpg'),
+//     postTime: '1 hours ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: require('../assets/posts/post-img-2.jpg'),
+//     liked: true,
+//     likes: '1',
+//     comments: '0',
+//     saved: false,
+//   },
+//   {
+//     id: '4',
+//     userName: 'Snowcone',
+//     userImg: require('../assets/users/user-4.jpg'),
+//     postTime: '1 day ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: require('../assets/posts/post-img-3.jpg'),
+//     liked: true,
+//     likes: '22',
+//     comments: '4',
+//     saved: true,
+//   },
+//   {
+//     id: '5',
+//     userName: 'Christy Alex',
+//     userImg: require('../assets/users/user-5.jpg'),
+//     postTime: '2 days ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: 'none',
+//     liked: false,
+//     likes: '0',
+//     comments: '0',
+//     saved: true,
+//   },
+//   {
+//     id: '6',
+//     userName: 'Christy Alex2',
+//     userImg: require('../assets/users/user-6.jpg'),
+//     postTime: '2 days ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: 'none',
+//     liked: false,
+//     likes: '0',
+//     comments: '0',
+//     saved: true,
+//   },
+//   {
+//     id: '7',
+//     userName: 'Christy Alex2',
+//     userImg: require('../assets/users/user-7.jpg'),
+//     postTime: '2 days ago',
+//     post: 'Hey there, this is my test for a post of my social app in React Native.',
+//     postImg: 'none',
+//     liked: false,
+//     likes: '0',
+//     comments: '0',
+//     saved: true,
+//   },
+// ];
 
 const Skeleton = () => {
   return (
@@ -161,13 +162,23 @@ const Skeleton = () => {
 };
 const Home = ({navigation}) => {
   const [skeleton, setSkeleton] = useState(true);
-  const [posts, setPosts] = useState(Posts);
+  const [posts, setPosts] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
   React.useEffect(() => {
+    axios
+      .get('posts?populate[0]=images&populate[1]=user')
+      .then(async function (response) {
+        console.log(response);
+        setPosts(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     setTimeout(() => {
       setSkeleton(false);
     }, 4000);
   }, []);
+
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -183,31 +194,33 @@ const Home = ({navigation}) => {
       ),
     });
   }, [navigation]);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 3000);
   }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
-      {skeleton ? (
+      {!posts ? (
         <Skeleton />
       ) : (
         <FlatList
-          data={posts}
-          ListHeaderComponent={
-            <View>
-              <FlatList
-                horizontal
-                data={posts}
-                renderItem={({item}) => <Story item={item} />}
-                keyExtractor={item => item.id}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
-          }
+          data={posts.data}
+          // ListHeaderComponent={
+          //   <View>
+          //     <FlatList
+          //       horizontal
+          //       data={posts}
+          //       renderItem={({attributes}) => <Story item={item} />}
+          //       keyExtractor={item => item.id}
+          //       showsVerticalScrollIndicator={false}
+          //       showsHorizontalScrollIndicator={false}
+          //     />
+          //   </View>
+          // }
           renderItem={({item}) => (
             <PostCard item={item} onPress={() => navigation.navigate('Post')} />
           )}

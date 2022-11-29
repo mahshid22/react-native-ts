@@ -2,28 +2,41 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
-import {windowHeight} from '../utils/dimention';
+import {windowHeight, windowWidth} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const PostCard = ({item, onPress}) => {
+  let post = item.attributes;
+  let time = new Date(post.createdAt);
+  let localtime = time.toLocaleString('en-GB', {timeZone: 'UTC'});
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={onPress}
       activeOpacity={0.7}>
       <View style={styles.userInfo}>
-        <Image source={item.userImg} style={styles.userImage} />
+        <Image
+          source={require('../assets/users/avatar.png')}
+          style={styles.userImage}
+        />
         <View>
-          <Text style={styles.userName}>{item.userName}</Text>
-          <Text style={styles.postTime}>{item.postTime}</Text>
+          <Text style={styles.userName}>
+            {post.user.data.attributes.username}
+          </Text>
+          <Text style={styles.postTime}>{localtime}</Text>
         </View>
       </View>
-      <Text style={styles.postText}>
-        Lorem ipsum is placeholder text commonly used in the graphic, print, and
-        publishing industries for previewing layouts and visual mockups.
-      </Text>
-      {item.postImg !== 'none' ? (
-        <Image source={item.postImg} style={styles.postImage} />
+      <Text style={styles.postText}>{post.caption}</Text>
+      {post.images.data.length &&
+      post.images.data[0].attributes.ext !== '.false' ? (
+        <Image
+          source={{
+            uri:
+              `https://powerful-dusk-84737.herokuapp.com` +
+              post.images.data[0].attributes.url,
+          }}
+          style={styles.postImage}
+        />
       ) : (
         <View style={styles.divider} />
       )}

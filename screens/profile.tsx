@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {
   StyleSheet,
   Button,
@@ -14,9 +14,24 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimention';
 import FormButton from '../components/FormButton';
+import axios from '../axios';
+import {AuthContext} from '../navogation/AuthProvider';
 
 const Profile = ({navigation}) => {
-  const gradient = `linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%), repeating-linear-gradient(-115deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 40px), repeating-linear-gradient(115deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 40px)`;
+  const [posts, setPosts] = useState([]);
+  const {user, setUser} = useContext(AuthContext);
+
+  React.useEffect(() => {
+    axios
+      .get('/posts/me')
+      .then(async function (response) {
+        console.log('response profile', response);
+        setPosts(response.data.results);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -25,6 +40,7 @@ const Profile = ({navigation}) => {
       });
     }, []),
   );
+  console.log('posts', posts);
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* <Button
@@ -61,8 +77,11 @@ const Profile = ({navigation}) => {
             </View>
           </View>
           <View style={styles.profileUserName}>
-            <Text style={styles.profileName}>Rasputin Cat</Text>
+            <Text style={styles.profileName}>{user.username}</Text>
             <Text style={styles.userSpecialty}>Proggmawer</Text>
+          </View>
+          <View style={styles.profileDescription}>
+            <Text>{user.email}</Text>
           </View>
           <View style={styles.profileDescription}>
             <Text>
@@ -70,97 +89,39 @@ const Profile = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.profilePostsContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/posts/post-img-5.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/users/user-2.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/users/user-7.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/users/user-6.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/users/user-1.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/users/user-3.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/posts/post-img-2.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/posts/post-img-3.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/posts/post-img-4.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Post');
-              }}>
-              <Image
-                source={require('../assets/posts/post-img-6.jpg')}
-                style={styles.profilePost}
-              />
-            </TouchableOpacity>
+            {posts.map((post: any) => {
+              if (post.images[0].ext !== '.false') {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Post', {id: post.id});
+                    }}>
+                    <Image
+                      source={{
+                        uri:
+                          `https://powerful-dusk-84737.herokuapp.com` +
+                          post.images[0].url,
+                      }}
+                      style={styles.profilePost}
+                    />
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      // /posts/51?populate=%2A
+                      navigation.navigate('Post', {params: {id: post.id}});
+                    }}>
+                    <Image
+                      source={require('../assets/users/nophoto.jpg')}
+                      style={styles.profilePost}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                );
+              }
+            })}
           </View>
         </View>
       </ScrollView>
@@ -245,6 +206,6 @@ const styles = StyleSheet.create({
   profilePost: {
     width: windowWidth / 3,
     height: windowWidth / 3,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
   },
 });
