@@ -80,7 +80,6 @@ const postDetail = [
 ];
 
 const HeaderComponent = title => {
-  console.log(title.title.attributes.title);
   const user = title.title.attributes;
   let time = new Date(title.title.attributes.createdAt);
   let localtime = time.toLocaleString('en-GB', {timeZone: 'UTC'});
@@ -145,7 +144,7 @@ const Post = ({navigation, route}) => {
   const [image, setImage] = useState(1);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
-  console.log(route.params.id);
+
   const submitPost = () => {
     setTransferred(0);
     setUploading(true);
@@ -158,13 +157,13 @@ const Post = ({navigation, route}) => {
     }, 1000);
   };
   const [refreshing, setRefreshing] = React.useState(false);
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState();
 
   React.useEffect(() => {
     axios
       .get(`/posts/${route.params.id}?populate=%2A`)
       .then(function (response) {
-        // console.log('response Post', response);
+        console.log('response Post new', response.data);
         setPost(response.data.data);
       })
       .catch(function (error) {
@@ -179,6 +178,7 @@ const Post = ({navigation, route}) => {
     }, 6000);
   }, []);
 
+  if (!post) return <Text>Loading</Text>;
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#080412'}}>
       {/* <SectionList

@@ -93,6 +93,7 @@ const Profile = ({navigation}) => {
               if (post.images[0].ext !== '.false') {
                 return (
                   <TouchableOpacity
+                    key={post.id}
                     onPress={() => {
                       navigation.navigate('Post', {id: post.id});
                     }}>

@@ -168,7 +168,7 @@ const Home = ({navigation}) => {
     axios
       .get('posts?populate[0]=images&populate[1]=user')
       .then(async function (response) {
-        console.log(response);
+        // console.log(response);
         setPosts(response.data);
       })
       .catch(function (error) {

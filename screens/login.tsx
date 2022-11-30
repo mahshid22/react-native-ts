@@ -50,9 +50,10 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const {user, setUser} = useContext(AuthContext);
-  const storeToken = async jwt => {
+  const storeToken = async data => {
     try {
-      await AsyncStorage.setItem('token', jwt);
+      await AsyncStorage.setItem('token', data.jwt);
+      await AsyncStorage.setItem('user', JSON.stringify(data.user));
     } catch (error) {
       console.log('Something went wrong', error);
     }
@@ -65,8 +66,8 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
         password: password,
       })
       .then(response => {
-        console.log(response);
-        storeToken(response.data.jwt);
+        // console.log(response);
+        storeToken(response.data);
         setUser(response.data.user);
       })
       .catch(function (error) {

@@ -27,7 +27,8 @@ const PostCard = ({item, onPress}) => {
         </View>
       </View>
       <Text style={styles.postText}>{post.caption}</Text>
-      {post.images.data.length &&
+      {post.images.data &&
+      post.images.data.length &&
       post.images.data[0].attributes.ext !== '.false' ? (
         <Image
           source={{

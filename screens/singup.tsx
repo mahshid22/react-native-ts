@@ -65,7 +65,7 @@ const SignUp = ({navigation}: Props<'SignUp'>) => {
         },
       )
       .then(response => {
-        console.log(response);
+        // console.log(response);
         storeToken(response.data.jwt);
         setUser(response.data.user);
       })

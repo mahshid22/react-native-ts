@@ -5,6 +5,7 @@ import axios from 'axios';
 const getToken = async () => {
   try {
     let t = await AsyncStorage.getItem('token');
+    console.log(t);
     return t;
   } catch (error) {
     console.log('Something went wrong', error);
