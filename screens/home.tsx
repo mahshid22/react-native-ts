@@ -4,15 +4,10 @@ import React, {useCallback, useState} from 'react';
 import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
 import PostCard from '../components/PostCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useFrameCallback} from 'react-native-reanimated';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {windowHeight, windowWidth} from '../utils/dimention';
 
-import {
-  NavigationHelpersContext,
-  useFocusEffect,
-} from '@react-navigation/native';
 import Story from '../components/Story';
 import axios from '../axios';
 
@@ -161,23 +156,33 @@ const Skeleton = () => {
   );
 };
 const Home = ({navigation}) => {
-  const [skeleton, setSkeleton] = useState(true);
   const [posts, setPosts] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
   React.useEffect(() => {
     axios
       .get('posts?populate[0]=images&populate[1]=user')
       .then(async function (response) {
-        // console.log(response);
+        console.log(response, 'useEffect');
         setPosts(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
-    setTimeout(() => {
-      setSkeleton(false);
-    }, 4000);
   }, []);
+  React.useEffect(() => {
+    if (refreshing) {
+      axios
+        .get('posts?populate[0]=images&populate[1]=user')
+        .then(async function (response) {
+          console.log(response, 'refreshing');
+          setPosts(response.data);
+          setRefreshing(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, [refreshing]);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -197,9 +202,6 @@ const Home = ({navigation}) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 3000);
   }, []);
 
   return (
@@ -209,20 +211,11 @@ const Home = ({navigation}) => {
       ) : (
         <FlatList
           data={posts.data}
-          // ListHeaderComponent={
-          //   <View>
-          //     <FlatList
-          //       horizontal
-          //       data={posts}
-          //       renderItem={({attributes}) => <Story item={item} />}
-          //       keyExtractor={item => item.id}
-          //       showsVerticalScrollIndicator={false}
-          //       showsHorizontalScrollIndicator={false}
-          //     />
-          //   </View>
-          // }
           renderItem={({item}) => (
-            <PostCard item={item} onPress={() => navigation.navigate('Post')} />
+            <PostCard
+              item={item}
+              onPress={() => navigation.navigate('Post', {id: item.id})}
+            />
           )}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}

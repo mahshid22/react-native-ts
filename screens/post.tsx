@@ -20,11 +20,12 @@ import Input from '../components/Input';
 import MultiLineInput from '../components/MultiLineInput';
 import PostCard from '../components/PostCard';
 import SocialButton from '../components/SocialButton';
-import {windowHeight} from '../utils/dimention';
+import {windowHeight, windowWidth} from '../utils/dimention';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Comment from '../components/Comment';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 // import PostCard from '../components/PostCard';
 const postDetail = [
   {
@@ -140,6 +141,36 @@ const HeaderComponent = title => {
     </View>
   );
 };
+
+const Skeleton = () => {
+  return (
+    <>
+      <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder.Item flexDirection="row" alignItems="center">
+          <SkeletonPlaceholder.Item
+            width={windowWidth}
+            height={windowHeight / 3}
+            borderRadius={25}
+            marginBottom={10}
+          />
+        </SkeletonPlaceholder.Item>
+      </SkeletonPlaceholder>
+      <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder.Item
+          flexDirection="column"
+          marginTop={2}
+          alignItems="center">
+          <SkeletonPlaceholder.Item
+            width={windowWidth}
+            height={windowHeight / 4}
+            borderRadius={25}
+          />
+        </SkeletonPlaceholder.Item>
+      </SkeletonPlaceholder>
+    </>
+  );
+};
+
 const Post = ({navigation, route}) => {
   const [image, setImage] = useState(1);
   const [uploading, setUploading] = useState(false);
@@ -178,7 +209,7 @@ const Post = ({navigation, route}) => {
     }, 6000);
   }, []);
 
-  if (!post) return <Text>Loading</Text>;
+  if (!post) return <Skeleton />;
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#080412'}}>
       {/* <SectionList

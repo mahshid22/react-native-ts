@@ -43,10 +43,6 @@ const Profile = ({navigation}) => {
   console.log('posts', posts);
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/* <Button
-        title="post details"
-        onPress={() => navigation.navigate('Post')}
-      /> */}
       <ScrollView>
         <View style={styles.profileContainer}>
           <View style={styles.profileUserInfo}>
@@ -98,6 +94,7 @@ const Profile = ({navigation}) => {
                       navigation.navigate('Post', {id: post.id});
                     }}>
                     <Image
+                      key={post.id}
                       source={{
                         uri:
                           `https://powerful-dusk-84737.herokuapp.com` +

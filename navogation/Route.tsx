@@ -31,7 +31,7 @@ const Routes = () => {
     token();
   }, []);
 
-  if (initializing) return <Splash />;
+  if (!initializing) return <Splash />;
   return (
     <SafeAreaProvider>
       <NavigationContainer>
