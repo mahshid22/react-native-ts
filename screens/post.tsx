@@ -26,7 +26,7 @@ import Comment from '../components/Comment';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-// import PostCard from '../components/PostCard';
+import usePost from '../hooks/usePost';
 const postDetail = [
   {
     title: {
@@ -172,6 +172,8 @@ const Skeleton = () => {
 };
 
 const Post = ({navigation, route}) => {
+  const {id} = route && route.params;
+  const {data: post, isSuccess, isLoading} = usePost(id);
   const [image, setImage] = useState(1);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
@@ -188,20 +190,6 @@ const Post = ({navigation, route}) => {
     }, 1000);
   };
   const [refreshing, setRefreshing] = React.useState(false);
-  const [post, setPost] = useState();
-
-  React.useEffect(() => {
-    axios
-      .get(`/posts/${route.params.id}?populate=%2A`)
-      .then(function (response) {
-        console.log('response Post new', response.data);
-        setPost(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [route.params.id]);
-  console.log('post', post);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -209,7 +197,7 @@ const Post = ({navigation, route}) => {
     }, 6000);
   }, []);
 
-  if (!post) return <Skeleton />;
+  if (isLoading || !isSuccess) return <Skeleton />;
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#080412'}}>
       {/* <SectionList

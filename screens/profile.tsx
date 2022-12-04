@@ -14,24 +14,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimention';
 import FormButton from '../components/FormButton';
-import axios from '../axios';
 import {AuthContext} from '../navogation/AuthProvider';
+import usePosts from '../hooks/usePosts';
 
 const Profile = ({navigation}) => {
-  const [posts, setPosts] = useState([]);
+  const {data: myPosts, isLoading, isSuccess} = usePosts();
   const {user, setUser} = useContext(AuthContext);
-
-  React.useEffect(() => {
-    axios
-      .get('/posts/me')
-      .then(async function (response) {
-        console.log('response profile', response);
-        setPosts(response.data.results);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -40,7 +28,7 @@ const Profile = ({navigation}) => {
       });
     }, []),
   );
-  console.log('posts', posts);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
@@ -85,41 +73,41 @@ const Profile = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.profilePostsContainer}>
-            {posts.map((post: any) => {
-              if (post.images[0].ext !== '.false') {
-                return (
-                  <TouchableOpacity
-                    key={post.id}
-                    onPress={() => {
-                      navigation.navigate('Post', {id: post.id});
-                    }}>
-                    <Image
+            {!isLoading &&
+              myPosts.data.map((post: any) => {
+                if (post.images && post.images[0].ext !== '.false') {
+                  return (
+                    <TouchableOpacity
                       key={post.id}
-                      source={{
-                        uri:
-                          `https://powerful-dusk-84737.herokuapp.com` +
-                          post.images[0].url,
-                      }}
-                      style={styles.profilePost}
-                    />
-                  </TouchableOpacity>
-                );
-              } else {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      // /posts/51?populate=%2A
-                      navigation.navigate('Post', {params: {id: post.id}});
-                    }}>
-                    <Image
-                      source={require('../assets/users/nophoto.jpg')}
-                      style={styles.profilePost}
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                );
-              }
-            })}
+                      onPress={() => {
+                        navigation.navigate('Post', {id: post.id});
+                      }}>
+                      <Image
+                        key={post.id}
+                        source={{
+                          uri:
+                            `https://powerful-dusk-84737.herokuapp.com` +
+                            post.images[0].url,
+                        }}
+                        style={styles.profilePost}
+                      />
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('Post', {params: {id: post.id}});
+                      }}>
+                      <Image
+                        source={require('../assets/users/nophoto.jpg')}
+                        style={styles.profilePost}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  );
+                }
+              })}
           </View>
         </View>
       </ScrollView>
