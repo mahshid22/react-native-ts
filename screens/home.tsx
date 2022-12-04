@@ -1,105 +1,18 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
+
 import PostCard from '../components/PostCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {windowHeight, windowWidth} from '../utils/dimention';
-
-import Story from '../components/Story';
-import axios from '../axios';
-
-// import PostCard from '../components/PostCard';
-
-// const Posts = [
-//   {
-//     id: '1',
-//     userName: 'Buddha kitty',
-//     userImg: require('../assets/users/user-1.jpg'),
-//     postTime: '4 mins ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: require('../assets/posts/post-img-4.jpg'),
-//     liked: true,
-//     likes: '14',
-//     comments: '55',
-//     saved: true,
-//   },
-//   {
-//     id: '2',
-//     userName: 'Cat Sprayed',
-//     userImg: require('../assets/users/user-2.jpg'),
-//     postTime: '2 hours ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: 'none',
-//     liked: false,
-//     likes: '8',
-//     comments: '0',
-//     saved: false,
-//   },
-//   {
-//     id: '3',
-//     userName: 'Rumpus Cat',
-//     userImg: require('../assets/users/user-3.jpg'),
-//     postTime: '1 hours ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: require('../assets/posts/post-img-2.jpg'),
-//     liked: true,
-//     likes: '1',
-//     comments: '0',
-//     saved: false,
-//   },
-//   {
-//     id: '4',
-//     userName: 'Snowcone',
-//     userImg: require('../assets/users/user-4.jpg'),
-//     postTime: '1 day ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: require('../assets/posts/post-img-3.jpg'),
-//     liked: true,
-//     likes: '22',
-//     comments: '4',
-//     saved: true,
-//   },
-//   {
-//     id: '5',
-//     userName: 'Christy Alex',
-//     userImg: require('../assets/users/user-5.jpg'),
-//     postTime: '2 days ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: 'none',
-//     liked: false,
-//     likes: '0',
-//     comments: '0',
-//     saved: true,
-//   },
-//   {
-//     id: '6',
-//     userName: 'Christy Alex2',
-//     userImg: require('../assets/users/user-6.jpg'),
-//     postTime: '2 days ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: 'none',
-//     liked: false,
-//     likes: '0',
-//     comments: '0',
-//     saved: true,
-//   },
-//   {
-//     id: '7',
-//     userName: 'Christy Alex2',
-//     userImg: require('../assets/users/user-7.jpg'),
-//     postTime: '2 days ago',
-//     post: 'Hey there, this is my test for a post of my social app in React Native.',
-//     postImg: 'none',
-//     liked: false,
-//     likes: '0',
-//     comments: '0',
-//     saved: true,
-//   },
-// ];
-
+import usePosts from '../hooks/usePosts';
+import usePostInfiniteQuery from '../hooks/usePosts';
+const renderSpinner = () => {
+  return <Text>loading</Text>;
+};
 const Skeleton = () => {
   return (
     <>
@@ -156,32 +69,24 @@ const Skeleton = () => {
   );
 };
 const Home = ({navigation}) => {
-  const [posts, setPosts] = useState();
+  // const [posts, setPosts] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
+  // const {data: posts, isLoading, isSuccess} = usePosts();
+  const [posts, rest] = usePostInfiniteQuery();
+
   React.useEffect(() => {
-    axios
-      .get('posts?populate[0]=images&populate[1]=user')
-      .then(async function (response) {
-        console.log(response, 'useEffect');
-        setPosts(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
-  React.useEffect(() => {
-    if (refreshing) {
-      axios
-        .get('posts?populate[0]=images&populate[1]=user')
-        .then(async function (response) {
-          console.log(response, 'refreshing');
-          setPosts(response.data);
-          setRefreshing(false);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    // if (refreshing) {
+    //   axios
+    //     .get('posts?populate[0]=images&populate[1]=user')
+    //     .then(async function (response) {
+    //       console.log(response, 'refreshing');
+    //       setPosts(response.data);
+    //       setRefreshing(false);
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     });
+    // }
   }, [refreshing]);
 
   React.useEffect(() => {
@@ -199,16 +104,26 @@ const Home = ({navigation}) => {
       ),
     });
   }, [navigation]);
-
+  const loadMore = () => {
+    if (rest.hasNextPage) {
+      rest.fetchNextPage();
+    }
+  };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
   }, []);
 
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
-      {!posts ? (
+  if (rest.status !== 'success') {
+    return (
+      <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <Skeleton />
-      ) : (
+      </SafeAreaView>
+    );
+  }
+
+  if (rest.status === 'success') {
+    return (
+      <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <FlatList
           data={posts.data}
           renderItem={({item}) => (
@@ -219,13 +134,19 @@ const Home = ({navigation}) => {
           )}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
+          ListFooterComponent={rest.isFetchingNextPage ? renderSpinner : null}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
-      )}
+      </SafeAreaView>
+    );
+  }
 
-      {/* <FlatList
+  {
+    /* <FlatList
         data={posts}
         ListHeaderComponent={
           <View>
@@ -247,8 +168,11 @@ const Home = ({navigation}) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      /> */}
-    </SafeAreaView>
-  );
+      /> */
+  }
+  {
+    /* </SafeAreaView> */
+  }
+  // );
 };
 export default Home;

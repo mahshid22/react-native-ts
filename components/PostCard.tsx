@@ -20,9 +20,7 @@ const PostCard = ({item, onPress}) => {
           style={styles.userImage}
         />
         <View>
-          <Text style={styles.userName}>
-            {post.user.data.attributes.username}
-          </Text>
+          <Text style={styles.userName}>{post.title}</Text>
           <Text style={styles.postTime}>{localtime}</Text>
         </View>
       </View>
@@ -32,9 +30,7 @@ const PostCard = ({item, onPress}) => {
       post.images.data[0].attributes.ext !== '.false' ? (
         <Image
           source={{
-            uri:
-              `https://powerful-dusk-84737.herokuapp.com` +
-              post.images.data[0].attributes.url,
+            uri: `http://192.168.0.7:1337` + post.images.data[0].attributes.url,
           }}
           style={styles.postImage}
         />
