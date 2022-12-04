@@ -9,7 +9,10 @@ import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Splash from '../components/splash';
+import Splash from '../screens/splash';
+import {QueryClient, QueryClientProvider} from 'react-query';
+
+const queryClient = new QueryClient();
 
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
@@ -22,7 +25,14 @@ const Routes = () => {
       try {
         userToken = await AsyncStorage.getItem('token');
         userInfo = await AsyncStorage.getItem('user');
-        if (userToken) setInitializing(true);
+        if (userToken) {
+          setTimeout(() => {
+            setInitializing(true);
+          }, 5000);
+        } else {
+          setInitializing(true);
+          setUser('');
+        }
         if (userInfo != null) setUser(JSON.parse(userInfo));
       } catch (error) {
         console.log('Something went wrong', error);
@@ -35,7 +45,9 @@ const Routes = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {user ? <AppStack /> : <AuthStack />}
+        <QueryClientProvider client={queryClient}>
+          {user ? <AppStack /> : <AuthStack />}
+        </QueryClientProvider>
       </NavigationContainer>
     </SafeAreaProvider>
   );
