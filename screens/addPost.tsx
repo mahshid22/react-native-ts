@@ -22,6 +22,8 @@ import SocialButton from '../components/SocialButton';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {windowHeight, windowWidth} from '../utils/dimention';
+import {useMutation} from 'react-query';
+import useAddPost from '../hooks/useAddPost';
 
 // import PostCard from '../components/PostCard';
 
@@ -87,6 +89,12 @@ const AddPost = ({navigation}) => {
   const [image, setImage] = useState();
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const {mutate, data, isSuccess, isLoading, isIdle, isError} = useAddPost();
+  React.useEffect(() => {
+    if (isSuccess) {
+      navigation.navigate('Home');
+    }
+  }, [isSuccess, navigation]);
   useFocusEffect(
     useCallback(() => {
       navigation.getParent().setOptions({
@@ -102,22 +110,44 @@ const AddPost = ({navigation}) => {
       response => {
         if (!response.didCancel) {
           setImage(response.assets[0]);
+          console.log(response.assets[0]);
         }
       },
     );
   };
-  const submitPost = () => {
-    setTransferred(0);
-    setUploading(true);
-    setTimeout(() => {
-      setUploading(false);
-      clearInterval(interval);
-      navigation.navigate('Home');
-    }, 5000);
-    const interval = setInterval(() => {
-      setTransferred(prevTransferred => prevTransferred + 20);
-    }, 1000);
+  const submitPost = async () => {
+    if (!image) return;
+
+    const data = {
+      title: 'hello from react native 2',
+      caption: 'testing images',
+    };
+
+    const payload = new FormData();
+
+    payload.append('data', JSON.stringify(data));
+
+    payload.append('files.images', {
+      name: image.fileName,
+
+      type: image.type,
+
+      uri: image.uri,
+    });
+    mutate(payload);
   };
+  // const submitPost = () => {
+  // setTransferred(0);
+  // setUploading(true);
+  // setTimeout(() => {
+  //   setUploading(false);
+  //   clearInterval(interval);
+  //   navigation.navigate('Home');
+  // }, 5000);
+  // const interval = setInterval(() => {
+  //   setTransferred(prevTransferred => prevTransferred + 20);
+  // }, 1000);
+  // };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
