@@ -5,7 +5,8 @@ import axios from 'axios';
 const getToken = async () => {
   try {
     let t = await AsyncStorage.getItem('token');
-    console.log(t);
+    // let t = await AsyncStorage.removeItem('token');
+    // let ta = await AsyncStorage.removeItem('user');
     return t;
   } catch (error) {
     console.log('Something went wrong', error);
@@ -13,7 +14,7 @@ const getToken = async () => {
 };
 
 const instance = axios.create({
-  baseURL: 'https://powerful-dusk-84737.herokuapp.com/api',
+  baseURL: 'http://192.168.0.7:1337/api',
 });
 
 instance.interceptors.request.use(async config => {

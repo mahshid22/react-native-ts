@@ -56,14 +56,11 @@ const SignUp = ({navigation}: Props<'SignUp'>) => {
   };
   const signUp = () => {
     axios
-      .post(
-        'https://powerful-dusk-84737.herokuapp.com/api/auth/local/register',
-        {
-          email: email,
-          username: userName,
-          password: password,
-        },
-      )
+      .post('http://192.168.0.7:1337/api/auth/local/register', {
+        email: email,
+        username: userName,
+        password: password,
+      })
       .then(response => {
         // console.log(response);
         storeToken(response.data.jwt);

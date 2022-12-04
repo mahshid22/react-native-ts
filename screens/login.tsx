@@ -61,12 +61,11 @@ const LogIn = ({navigation}: Props<'LogIn'>) => {
   const logIn = () => {
     console.log('object', userName, password);
     axios
-      .post('https://powerful-dusk-84737.herokuapp.com/api/auth/local', {
+      .post('http://192.168.0.7:1337/api/auth/local', {
         identifier: userName,
         password: password,
       })
       .then(response => {
-        // console.log(response);
         storeToken(response.data);
         setUser(response.data.user);
       })
