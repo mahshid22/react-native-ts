@@ -1,7 +1,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import {FlatList, Image, RefreshControl, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 
 import PostCard from '../components/PostCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,7 +18,7 @@ import {windowHeight, windowWidth} from '../utils/dimention';
 import usePosts from '../hooks/usePosts';
 import usePostInfiniteQuery from '../hooks/usePosts';
 const renderSpinner = () => {
-  return <Text>loading</Text>;
+  return <ActivityIndicator size="large" color="#00ff00" />;
 };
 const Skeleton = () => {
   return (
@@ -125,7 +132,7 @@ const Home = ({navigation}) => {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <FlatList
-          data={posts.data}
+          data={posts}
           renderItem={({item}) => (
             <PostCard
               item={item}
@@ -135,7 +142,7 @@ const Home = ({navigation}) => {
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           onEndReached={loadMore}
-          onEndReachedThreshold={0.3}
+          onEndReachedThreshold={5}
           ListFooterComponent={rest.isFetchingNextPage ? renderSpinner : null}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

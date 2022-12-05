@@ -13,27 +13,21 @@
 
 import axios from '../axios';
 import {useInfiniteQuery} from 'react-query';
-import {InfiniteData} from 'react-query';
 
 export const flattenInfiniteQueryPages = data => {
   const allData = data.pages.reduce((all, d) => {
-    const content = d.content;
+    const content = d.data;
     if (content) return [...all, ...content];
     return all;
-  });
+  }, []);
 
   return allData;
 };
 const getPosts = async ({pageParam = 1}) => {
-  console.log(
-    axios.get(
-      `posts?populate[0]=images&populate[1]=user?pagination[page]=${pageParam}&pagination[pageSize]=3`,
-    ),
-  );
   const res = await axios.get(
-    `posts?populate[0]=images&populate[1]=user?pagination[page]=${pageParam}&pagination[pageSize]=20`,
+    `posts?populate[0]=images&populate[1]=user&pagination[page]=${pageParam}&pagination[pageSize]=3`,
   );
-  console.log(`res.data page ${pageParam}`, res.data.meta);
+  console.log(`res.data page ${pageParam}`, res.data);
   return res.data;
 };
 
@@ -48,6 +42,7 @@ export default function usePostInfiniteQuery(enabled?: boolean) {
       return undefined;
     },
   });
+  console.log('posts', data);
   const posts = data ? flattenInfiniteQueryPages(data) : [];
   return [posts, rest] as const;
 }
