@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useContext} from 'react';
 import {
@@ -73,8 +74,12 @@ const Settings = ({navigation}) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({item}) => <Item title={item} />}
         renderSectionHeader={({section: {title}}) =>
-          title === 'DELETE ACCOUNT' ? (
-            <TouchableOpacity>
+          title === 'LOGOUT' ? (
+            <TouchableOpacity
+              onPress={() => {
+                AsyncStorage.removeItem('token');
+                AsyncStorage.removeItem('user');
+              }}>
               <Text style={styles.deleteHeader}>{title}</Text>
             </TouchableOpacity>
           ) : (

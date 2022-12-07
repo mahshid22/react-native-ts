@@ -25,6 +25,7 @@ const Routes = () => {
       try {
         userToken = await AsyncStorage.getItem('token');
         userInfo = await AsyncStorage.getItem('user');
+        console.log(userToken);
         if (userToken) {
           setTimeout(() => {
             setInitializing(true);

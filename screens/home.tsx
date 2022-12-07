@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -17,6 +17,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {windowHeight, windowWidth} from '../utils/dimention';
 import usePosts from '../hooks/usePosts';
 import usePostInfiniteQuery from '../hooks/usePosts';
+import {QueryClient} from 'react-query';
 const renderSpinner = () => {
   return <ActivityIndicator size="large" color="#00ff00" />;
 };
@@ -76,25 +77,18 @@ const Skeleton = () => {
   );
 };
 const Home = ({navigation}) => {
-  // const [posts, setPosts] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
-  // const {data: posts, isLoading, isSuccess} = usePosts();
   const [posts, rest] = usePostInfiniteQuery();
 
   React.useEffect(() => {
-    // if (refreshing) {
-    //   axios
-    //     .get('posts?populate[0]=images&populate[1]=user')
-    //     .then(async function (response) {
-    //       console.log(response, 'refreshing');
-    //       setPosts(response.data);
-    //       setRefreshing(false);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });
-    // }
-  }, [refreshing]);
+    const queryClient = new QueryClient();
+    if (rest.isFetching) {
+      setRefreshing(false);
+    }
+    if (refreshing && rest.isSuccess) {
+      rest.refetch({refetchPage: (page, index) => index === 0});
+    }
+  }, [refreshing, rest]);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -111,6 +105,7 @@ const Home = ({navigation}) => {
       ),
     });
   }, [navigation]);
+
   const loadMore = () => {
     if (rest.hasNextPage) {
       rest.fetchNextPage();
@@ -119,6 +114,16 @@ const Home = ({navigation}) => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
   }, []);
+
+  const renderItem = useCallback(
+    ({item}) => (
+      <PostCard
+        item={item}
+        onPress={() => navigation.navigate('Post', {id: item.id})}
+      />
+    ),
+    [posts],
+  );
 
   if (rest.status !== 'success') {
     return (
@@ -133,16 +138,16 @@ const Home = ({navigation}) => {
       <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <FlatList
           data={posts}
-          renderItem={({item}) => (
-            <PostCard
-              item={item}
-              onPress={() => navigation.navigate('Post', {id: item.id})}
-            />
-          )}
+          renderItem={renderItem}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           onEndReached={loadMore}
-          onEndReachedThreshold={5}
+          onEndReachedThreshold={2}
+          getItemLayout={(_, index) => ({
+            length: 101,
+            offset: 101 * index,
+            index,
+          })}
           ListFooterComponent={rest.isFetchingNextPage ? renderSpinner : null}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -151,35 +156,5 @@ const Home = ({navigation}) => {
       </SafeAreaView>
     );
   }
-
-  {
-    /* <FlatList
-        data={posts}
-        ListHeaderComponent={
-          <View>
-            <FlatList
-              horizontal
-              data={posts}
-              renderItem={({item}) => <Story item={item} />}
-              keyExtractor={item => item.id}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        }
-        renderItem={({item}) => (
-          <PostCard item={item} onPress={() => navigation.navigate('Post')} />
-        )}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      /> */
-  }
-  {
-    /* </SafeAreaView> */
-  }
-  // );
 };
 export default Home;

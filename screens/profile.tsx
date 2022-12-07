@@ -9,16 +9,69 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  SectionList,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimention';
 import FormButton from '../components/FormButton';
 import {AuthContext} from '../navogation/AuthProvider';
-import usePosts from '../hooks/usePosts';
+import useMyPosts from '../hooks/useMyPosts';
+import useMyPostInfiniteQuery from '../hooks/useMyPosts';
+
+const renderSpinner = () => {
+  return <ActivityIndicator size="large" color="#00ff00" />;
+};
+const HeaderComponent = user => {
+  return (
+    <View style={styles.profileContainer}>
+      <View style={styles.profileUserInfo}>
+        <View style={styles.profileImageView}>
+          <Image
+            source={require('../assets/posts/post-img-5.jpg')}
+            style={styles.profileImage}
+          />
+        </View>
+        <View style={styles.profileFollowingInfo}>
+          <View style={styles.profileFollowing}>
+            <View style={styles.profilePostsNumber}>
+              <Text style={styles.flowwingNumber}>530</Text>
+              <Text>Posts</Text>
+            </View>
+            <View style={styles.profileFollowersNumber}>
+              <Text style={styles.flowwingNumber}>3K</Text>
+              <Text>Followers</Text>
+            </View>
+            <View style={styles.profileFollowingNumber}>
+              <Text style={styles.flowwingNumber}>530</Text>
+              <Text>Following</Text>
+            </View>
+          </View>
+          <View style={styles.profileFollowingBTN}>
+            <FormButton buttonTitle="Follow" />
+          </View>
+        </View>
+      </View>
+      <View style={styles.profileUserName}>
+        <Text style={styles.profileName}>{user.username}</Text>
+        <Text style={styles.userSpecialty}>Proggmawer</Text>
+      </View>
+      <View style={styles.profileDescription}>
+        <Text>{user.email}</Text>
+      </View>
+      <View style={styles.profileDescription}>
+        <Text>
+          A cat who is interested to programming - familier with React ...
+        </Text>
+      </View>
+    </View>
+  );
+};
 
 const Profile = ({navigation}) => {
-  const {data: myPosts, isLoading, isSuccess} = usePosts();
+  const [myPosts, rest] = useMyPostInfiniteQuery();
   const {user, setUser} = useContext(AuthContext);
 
   useFocusEffect(
@@ -28,54 +81,98 @@ const Profile = ({navigation}) => {
       });
     }, []),
   );
+  const loadMore = () => {
+    if (rest.hasNextPage) {
+      rest.fetchNextPage();
+    }
+  };
 
+  if (rest.isLoading) return <Text>Loading ...</Text>;
   return (
     <SafeAreaView style={{flex: 1}}>
-      <ScrollView>
+      {/* <View style={styles.profilePostsContainer}> */}
+      {rest.isSuccess && (
+        <FlatList
+          data={myPosts}
+          numColumns={3}
+          horizontal={false}
+          onEndReached={loadMore}
+          onEndReachedThreshold={2}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => {
+                  navigation.navigate('Post', {id: item.id});
+                }}>
+                <Image
+                  key={item.id}
+                  source={{
+                    uri:
+                      `http://192.168.0.7:1337` +
+                      item.attributes.images.data[0].attributes.url,
+                  }}
+                  style={styles.profilePost}
+                />
+              </TouchableOpacity>
+            );
+          }}
+          ListHeaderComponent={user => <HeaderComponent user={user} />}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={rest.isFetchingNextPage ? renderSpinner : null}
+        />
+      )}
+      {/* <ScrollView>
         <View style={styles.profileContainer}>
-          <View style={styles.profileUserInfo}>
-            <View style={styles.profileImageView}>
-              <Image
-                source={require('../assets/posts/post-img-5.jpg')}
-                style={styles.profileImage}
-              />
-            </View>
-            <View style={styles.profileFollowingInfo}>
-              <View style={styles.profileFollowing}>
-                <View style={styles.profilePostsNumber}>
-                  <Text style={styles.flowwingNumber}>530</Text>
-                  <Text>Posts</Text>
-                </View>
+        <View style={styles.profileUserInfo}>
+        <View style={styles.profileImageView}>
+        <Image
+        source={require('../assets/posts/post-img-5.jpg')}
+        style={styles.profileImage}
+        />
+        </View>
+        <View style={styles.profileFollowingInfo}>
+        <View style={styles.profileFollowing}>
+        <View style={styles.profilePostsNumber}>
+        <Text style={styles.flowwingNumber}>530</Text>
+        <Text>Posts</Text>
+        </View>
                 <View style={styles.profileFollowersNumber}>
-                  <Text style={styles.flowwingNumber}>3K</Text>
+                <Text style={styles.flowwingNumber}>3K</Text>
                   <Text>Followers</Text>
-                </View>
-                <View style={styles.profileFollowingNumber}>
+                  </View>
+                  <View style={styles.profileFollowingNumber}>
                   <Text style={styles.flowwingNumber}>530</Text>
                   <Text>Following</Text>
-                </View>
-              </View>
-              <View style={styles.profileFollowingBTN}>
-                <FormButton buttonTitle="Follow" />
-              </View>
-            </View>
-          </View>
-          <View style={styles.profileUserName}>
-            <Text style={styles.profileName}>{user.username}</Text>
-            <Text style={styles.userSpecialty}>Proggmawer</Text>
-          </View>
-          <View style={styles.profileDescription}>
-            <Text>{user.email}</Text>
-          </View>
-          <View style={styles.profileDescription}>
-            <Text>
-              A cat who is interested to programming - familier with React ...
-            </Text>
-          </View>
-          <View style={styles.profilePostsContainer}>
-            {!isLoading &&
-              myPosts.data.map((post: any) => {
-                if (post.images && post.images[0].ext !== '.false') {
+                  </View>
+                  </View>
+                  <View style={styles.profileFollowingBTN}>
+                  <FormButton buttonTitle="Follow" />
+                  </View>
+                  </View>
+                  </View>
+                  <View style={styles.profileUserName}>
+                  <Text style={styles.profileName}>{user.username}</Text>
+                  <Text style={styles.userSpecialty}>Proggmawer</Text>
+                  </View>
+                  <View style={styles.profileDescription}>
+                  <Text>{user.email}</Text>
+                  </View>
+                  <View style={styles.profileDescription}>
+                  <Text>
+                  A cat who is interested to programming - familier with React ...
+                  </Text>
+                  </View>
+                  
+                  <View style={styles.profilePostsContainer}>
+                  {!rest.isLoading &&
+                    rest.isSuccess &&
+                    myPosts.map((post: any) => {
+                      if (
+                  post.attributes.images.data &&
+                  post.attributes.images.data[0].attributes.ext !== '.false'
+                ) {
                   return (
                     <TouchableOpacity
                       key={post.id}
@@ -86,8 +183,8 @@ const Profile = ({navigation}) => {
                         key={post.id}
                         source={{
                           uri:
-                            `https://powerful-dusk-84737.herokuapp.com` +
-                            post.images[0].url,
+                            `http://192.168.0.7:1337` +
+                            post.attributes.images.data[0].attributes.url,
                         }}
                         style={styles.profilePost}
                       />
@@ -96,7 +193,8 @@ const Profile = ({navigation}) => {
                 } else {
                   return (
                     <TouchableOpacity
-                      onPress={() => {
+                    key={post.id}
+                    onPress={() => {
                         navigation.navigate('Post', {params: {id: post.id}});
                       }}>
                       <Image
@@ -110,7 +208,8 @@ const Profile = ({navigation}) => {
               })}
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> */}
+      {/* </View> */}
     </SafeAreaView>
   );
 };

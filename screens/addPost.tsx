@@ -110,7 +110,6 @@ const AddPost = ({navigation}) => {
       response => {
         if (!response.didCancel) {
           setImage(response.assets[0]);
-          console.log(response.assets[0]);
         }
       },
     );
